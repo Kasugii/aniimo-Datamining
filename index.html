@@ -1,868 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aniimo — Client File Survey 1.0.0.281</title>
+<meta name="robots" content="noindex">
+<title>Aniimo \u2014 Compendium Artwork</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f7f4fc;
-  --bg-2:#efeaf8;
-  --card:#ffffff;
-  --ink:#3f3557;
-  --ink-soft:#6b6188;
-  --ink-faint:#9a92b3;
-  --rule:#e3dcf2;
-
-  --mint:#4fc3a1;      --mint-bg:#e4f7f1;
-  --apricot:#efa765;   --apricot-bg:#fdf0e2;
-  --lilac:#a486e8;     --lilac-bg:#f0eafd;
-  --slate:#a9b3c9;     --slate-bg:#edf0f6;
-  --blush:#f2799f;     --blush-bg:#fdeaf1;
-  --sky:#6cb8e8;       --sky-bg:#e6f3fc;
-
-  --shadow-s:0 2px 8px rgba(96,72,150,.07);
-  --shadow-m:0 6px 20px rgba(96,72,150,.10);
-  --shadow-l:0 14px 38px rgba(96,72,150,.14);
-
-  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --measure:64ch;
-  --ease:cubic-bezier(.22,.9,.32,1);
+  --bg:#f7f4fc; --bg-2:#efeaf8; --card:#fff;
+  --ink:#3f3557; --ink-soft:#6b6188; --ink-faint:#9a92b3; --line:#e3dcf2;
+  --mint:#4fc3a1; --mint-bg:#e4f7f1;
+  --apricot:#efa765; --apricot-bg:#fdf0e2;
+  --lilac:#a486e8; --lilac-bg:#f0eafd;
+  --slate:#a9b3c9; --slate-bg:#edf0f6;
+  --shadow-s:0 1px 3px rgba(63,53,87,.06),0 3px 10px rgba(63,53,87,.05);
+  --shadow-m:0 4px 14px rgba(63,53,87,.10),0 10px 30px rgba(63,53,87,.08);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
 }
-
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:3rem 1.5rem 5rem}
+header{text-align:center;margin-bottom:2rem}
+.logo{width:46px;height:46px;border-radius:50%;margin:0 auto .8rem;background:linear-gradient(135deg,var(--lilac),var(--blush,#f2799f))}
+h1{font:700 2.1rem/1.2 Fraunces,serif;margin:0 0 .3rem;letter-spacing:-.01em}
+.sub{color:var(--ink-faint);font:500 .82rem/1.6 var(--mono);margin:0}
 
-body{
-  margin:0;
-  background:
-    radial-gradient(1100px 620px at 78% -8%, #fde9f1 0%, transparent 58%),
-    radial-gradient(900px 540px at 4% 12%, #e4f4fb 0%, transparent 52%),
-    var(--bg);
-  background-attachment:fixed;
-  color:var(--ink);
-  font:400 17px/1.68 Nunito,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-
-.shell{display:grid;grid-template-columns:238px minmax(0,1fr);max-width:1220px;margin:0 auto}
-
-/* ---------------- rail ---------------- */
-.rail{
-  position:sticky;top:0;align-self:start;height:100vh;
-  padding:2.6rem 1.5rem 2rem 1.7rem;
-  display:flex;flex-direction:column;gap:1.7rem;overflow-y:auto;
-}
-.mark{
-  display:inline-flex;align-items:center;gap:.55rem;
-  font:700 1.12rem/1 Fraunces,Georgia,serif;
-  font-variation-settings:"SOFT" 40,"WONK" 1;
-  letter-spacing:-.015em;margin:0;
-}
-.mark .dot{
-  width:26px;height:26px;border-radius:50%;flex:none;
-  background:linear-gradient(140deg,var(--blush),var(--lilac) 55%,var(--sky));
-  box-shadow:0 3px 10px rgba(164,134,232,.4);
-}
-.rail .build{
-  font:500 .74rem/1.5 var(--mono);color:var(--ink-faint);
-  margin-top:.7rem;padding-left:.15rem;
-}
-.rail nav{display:flex;flex-direction:column;gap:.18rem}
-.rail nav a{
-  color:var(--ink-soft);text-decoration:none;font-size:.88rem;font-weight:600;
-  padding:.46rem .8rem;border-radius:99px;
-  transition:background .22s var(--ease),color .22s var(--ease),transform .22s var(--ease);
-}
-.rail nav a:hover,.rail nav a:focus-visible{background:var(--card);color:var(--ink);transform:translateX(3px);box-shadow:var(--shadow-s)}
-.rail nav a.on{background:linear-gradient(135deg,var(--lilac-bg),var(--sky-bg));color:var(--ink)}
-.rail footer{margin-top:auto;font-size:.76rem;color:var(--ink-faint);line-height:1.55}
-
-main{padding:2.8rem 3.2rem 7rem;min-width:0}
-section{margin-bottom:4.6rem;scroll-margin-top:1.6rem}
-section>p,section>ul{max-width:var(--measure)}
-
-h2{
-  font:600 1.95rem/1.18 Fraunces,Georgia,serif;
-  font-variation-settings:"SOFT" 40,"WONK" 1;
-  margin:0 0 .4rem;letter-spacing:-.02em;
-}
-h3{font:700 1.02rem/1.35 Nunito,sans-serif;margin:2.1rem 0 .55rem}
-.lede{color:var(--ink-soft);margin:0 0 1.9rem;max-width:var(--measure)}
-p{margin:0 0 1rem}
-a{color:#8a63d8}
-code{
-  font:500 .85em/1.4 var(--mono);background:var(--bg-2);
-  padding:.14em .4em;border-radius:5px;color:#6d5fa0;
-}
-
-/* ---------------- hero ---------------- */
-.hero{
-  background:var(--card);border-radius:26px;padding:2.4rem 2.4rem 2rem;
-  box-shadow:var(--shadow-l);margin-bottom:4.6rem;
-  border:1px solid rgba(255,255,255,.8);
-}
-.hero h2{font-size:2.6rem}
-.hero .sub{color:var(--ink-soft);max-width:var(--measure);margin:.7rem 0 2rem}
-
-.census{display:grid;grid-template-columns:repeat(auto-fill,minmax(30px,1fr));gap:6px;margin-bottom:1.6rem}
-.cell{
-  aspect-ratio:1;border-radius:9px;border:2px solid transparent;
-  display:grid;place-items:center;font:700 .6rem/1 Nunito,sans-serif;
-  position:relative;cursor:default;
-  opacity:0;transform:scale(.5);
-  animation:pop .5s var(--ease) forwards;
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
-}
-@keyframes pop{to{opacity:1;transform:scale(1)}}
-.cell[data-t=rig]{background:var(--mint);color:#fff;border-color:var(--mint)}
-.cell[data-t=tex]{background:var(--apricot);color:#fff;border-color:var(--apricot)}
-.cell[data-t=art]{background:var(--lilac-bg);color:#8a63d8;border-color:var(--lilac)}
-.cell[data-t=ref]{background:transparent;color:var(--slate);border-color:var(--slate);border-style:dashed}
-.cell:hover{transform:scale(1.28);box-shadow:var(--shadow-m);z-index:3}
-.cell:hover::after{
-  content:attr(data-id);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);
-  background:var(--ink);color:#fff;font:600 .7rem/1 var(--mono);
-  padding:.34rem .5rem;border-radius:7px;white-space:nowrap;box-shadow:var(--shadow-m);
-}
-
-.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(184px,1fr));gap:1rem;padding-top:1.5rem;border-top:1px solid var(--rule)}
-.legend div{display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem;line-height:1.45}
-.swatch{width:15px;height:15px;border-radius:5px;flex:none;margin-top:.25rem;border:2px solid}
-.swatch.rig{background:var(--mint);border-color:var(--mint)}
-.swatch.tex{background:var(--apricot);border-color:var(--apricot)}
-.swatch.art{background:var(--lilac-bg);border-color:var(--lilac)}
-.swatch.ref{border-color:var(--slate);border-style:dashed}
-.legend b{display:block;font-weight:700}
-.legend span{color:var(--ink-faint)}
-
-/* ---------------- records ---------------- */
-.rec{
-  border-radius:18px;padding:1.15rem 1.35rem;margin:0 0 1.1rem;max-width:var(--measure);
-  background:var(--card);box-shadow:var(--shadow-s);
-  border-left:5px solid var(--rule);
-  transition:box-shadow .28s var(--ease),transform .28s var(--ease);
-}
-.rec:hover{box-shadow:var(--shadow-m);transform:translateY(-2px)}
-.rec[data-c=conf]{border-left-color:var(--mint);background:linear-gradient(100deg,var(--mint-bg) 0%,var(--card) 34%)}
-.rec[data-c=lik]{border-left-color:var(--apricot);background:linear-gradient(100deg,var(--apricot-bg) 0%,var(--card) 34%)}
-.rec[data-c=open]{border-left-color:var(--lilac);background:linear-gradient(100deg,var(--lilac-bg) 0%,var(--card) 34%)}
-.rec h4{margin:0 0 .4rem;font:700 1.02rem/1.4 Nunito,sans-serif;display:flex;flex-wrap:wrap;align-items:center;gap:.55rem}
-.rec p{margin:0 0 .55rem;color:var(--ink-soft);font-size:.94rem}
-.rec p:last-child{margin-bottom:0}
-.rec pre{margin-bottom:0}
-.tag{font:700 .68rem/1 Nunito,sans-serif;padding:.34rem .62rem;border-radius:99px;white-space:nowrap}
-.tag.conf{background:var(--mint);color:#fff}
-.tag.lik{background:var(--apricot);color:#fff}
-.tag.open{background:var(--lilac);color:#fff}
-
-/* ---------------- tables ---------------- */
-table{
-  border-collapse:separate;border-spacing:0;width:100%;max-width:var(--measure);
-  font-size:.9rem;margin:.5rem 0 1.5rem;background:var(--card);
-  border-radius:14px;overflow:hidden;box-shadow:var(--shadow-s);
-}
-th,td{text-align:left;padding:.6rem .9rem;border-bottom:1px solid var(--rule)}
-tr:last-child td{border-bottom:0}
-th{font-weight:700;font-size:.76rem;color:var(--ink-faint);background:var(--bg-2);letter-spacing:.02em}
-tbody tr{transition:background .2s var(--ease)}
-tbody tr:hover{background:var(--bg)}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-
-pre{
-  background:var(--bg-2);border-radius:12px;padding:.95rem 1.1rem;overflow-x:auto;
-  font:500 .8rem/1.6 var(--mono);margin:.5rem 0 1.4rem;max-width:var(--measure);color:#6d5fa0;
-}
-
-/* ---------------- buttons ---------------- */
-.btn{
-  font:700 .92rem/1 Nunito,sans-serif;border:0;border-radius:99px;cursor:pointer;
-  padding:.82rem 1.5rem;color:#fff;
-  background:linear-gradient(135deg,#b18ae8,#8ab4ea);
-  box-shadow:0 5px 16px rgba(150,120,225,.36);
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
-}
-.btn:hover{transform:translateY(-2px);box-shadow:0 9px 24px rgba(150,120,225,.46);filter:saturate(1.12)}
-.btn:active{transform:translateY(0) scale(.975);box-shadow:0 3px 10px rgba(150,120,225,.34)}
-.btn.ghost{
-  background:var(--card);color:var(--ink-soft);
-  box-shadow:inset 0 0 0 2px var(--rule),var(--shadow-s);
-}
-.btn.ghost:hover{color:var(--ink);box-shadow:inset 0 0 0 2px var(--lilac),var(--shadow-m)}
-:focus-visible{outline:3px solid var(--lilac);outline-offset:3px;border-radius:8px}
-
-/* ---------------- gallery ---------------- */
-.drop{
-  border:2.5px dashed var(--rule);border-radius:22px;padding:2.8rem 1.8rem;text-align:center;
-  background:var(--card);max-width:var(--measure);box-shadow:var(--shadow-s);
-  transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
-}
-.drop.over{border-color:var(--lilac);background:var(--lilac-bg);transform:scale(1.012)}
-.drop p{color:var(--ink-soft);font-size:.92rem;margin:.95rem auto 0;max-width:44ch}
-
-.gal-bar{display:none;flex-wrap:wrap;gap:.8rem;align-items:center;margin:1.6rem 0 1.4rem}
-.gal-bar input{
-  font:500 .92rem Nunito,sans-serif;padding:.72rem 1.1rem;border:2px solid var(--rule);
-  border-radius:99px;background:var(--card);color:var(--ink);min-width:15rem;
-  transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
-}
-.gal-bar input:focus{border-color:var(--lilac);box-shadow:0 0 0 4px var(--lilac-bg);outline:none}
+.gal-bar{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;justify-content:center;margin:1.6rem 0 1.2rem}
+.gal-bar input{flex:0 1 320px;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:.62rem 1.05rem;font:400 .92rem Nunito,sans-serif;color:var(--ink);outline:none;transition:border-color .2s var(--ease)}
+.gal-bar input:focus{border-color:var(--lilac)}
 .gal-bar input::placeholder{color:var(--ink-faint)}
-.count{font:700 .82rem Nunito,sans-serif;color:var(--ink-faint)}
+.pill{background:var(--lilac-bg);color:#7b52c8;font:700 .72rem/1 Nunito,sans-serif;padding:.42rem .8rem;border-radius:99px;white-space:nowrap}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:1.2rem}
-.card{
-  background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-s);
-  transition:transform .28s var(--ease),box-shadow .28s var(--ease);
-  opacity:0;animation:rise .42s var(--ease) forwards;
-}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.card:hover{transform:translateY(-5px);box-shadow:var(--shadow-l)}
-.card figure{margin:0}
-.card img{
-  display:block;width:100%;height:158px;object-fit:contain;
-  background:linear-gradient(160deg,var(--sky-bg),var(--lilac-bg));
-  transition:transform .35s var(--ease);
-}
-.card:hover img{transform:scale(1.07)}
-.card figcaption{padding:.62rem .75rem .75rem}
-.card .cid{font:700 .88rem Nunito,sans-serif}
-.card .cform{color:var(--ink-faint);display:block;margin-top:.14rem;font-size:.76rem;line-height:1.4}
+.drop{border:2px dashed var(--line);border-radius:18px;padding:2.4rem 1.4rem;text-align:center;color:var(--ink-faint);background:var(--card);margin-bottom:1.6rem;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.drop.over{border-color:var(--lilac);background:var(--lilac-bg)}
+.drop b{display:block;color:var(--ink);font:700 1rem Nunito,sans-serif;margin-bottom:.2rem}
 
+.fam{background:var(--card);border-radius:20px;padding:1.1rem 1.25rem;box-shadow:var(--shadow-s);margin-bottom:1.1rem}
+.fam-h{display:flex;align-items:baseline;gap:.65rem;padding-bottom:.7rem;border-bottom:1px solid var(--line);margin-bottom:.9rem}
+.fam-h b{font:700 1.06rem Fraunces,serif}
+.fam-h em{font-style:normal;color:var(--ink-faint);font-size:.82rem}
+.fam-h .pill{margin-left:auto}
 
-/* ---------- family tree gallery ---------- */
-.fam{background:var(--card);border-radius:20px;padding:1.3rem 1.4rem;margin-bottom:1.3rem;box-shadow:var(--shadow-s);transition:box-shadow .28s var(--ease)}
-.fam:hover{box-shadow:var(--shadow-m)}
-.fam-h{display:flex;align-items:baseline;gap:.7rem;margin:0 0 1rem;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
-.fam-h b{font:700 1.02rem/1 Nunito,sans-serif}
-.fam-h em{font-style:normal;font:500 .78rem/1 var(--mono);color:var(--ink-faint)}
-.fam-h .pill{margin-left:auto;font:700 .68rem/1 Nunito,sans-serif;background:var(--bg-2);color:var(--ink-soft);padding:.34rem .66rem;border-radius:99px}
-.sp{padding:.75rem 0;border-bottom:1px dashed var(--rule)}
-.sp:last-child{border-bottom:0;padding-bottom:0}
-.sp-head{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:.6rem}
-.sp-id{font:700 .9rem/1 var(--mono);background:var(--bg-2);padding:.36rem .56rem;border-radius:8px;color:#6d5fa0}
-.sp-name{font:600 .92rem Nunito,sans-serif;padding:.42rem .8rem;border:2px solid transparent;border-radius:99px;background:var(--bg);color:var(--ink);min-width:11rem;max-width:16rem;transition:border-color .2s var(--ease),background .2s var(--ease)}
-.sp-name:hover{background:var(--bg-2)}
-.sp-name:focus{border-color:var(--lilac);background:var(--card);outline:none}
+.sp{padding:.85rem 0;border-top:1px dashed var(--line)}
+.sp:first-of-type{border-top:0;padding-top:0}
+.sp-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;flex-wrap:wrap}
+.sp-id{font:700 .88rem/1 var(--mono);background:var(--bg-2);padding:.36rem .56rem;border-radius:8px;color:#6d5fa0}
+.sp-known{font:700 1rem/1 Nunito,sans-serif;color:#8a63d8;background:var(--lilac-bg);padding:.34rem .62rem;border-radius:8px}
+.dot-t{width:9px;height:9px;border-radius:50%;flex:0 0 auto;background:var(--slate)}
+.dot-t[data-t=rig]{background:var(--mint)}
+.dot-t[data-t=tex]{background:var(--apricot)}
+.dot-t[data-t=art]{background:var(--lilac)}
 
-.sp-known{font:700 1rem/1 Nunito,sans-serif;color:#8a63d8;background:var(--lilac-bg);padding:.34rem .62rem;border-radius:8px;white-space:nowrap}
-.sp-name.sp-edit{flex:0 1 8.5rem;opacity:.55;font-size:.82rem;transition:opacity .2s var(--ease)}
-.sp-name.sp-edit:focus{opacity:1}
-.sp-name::placeholder{color:var(--ink-faint);font-weight:400;font-style:italic}
-.dot-t{width:10px;height:10px;border-radius:50%;flex:none;border:2px solid}
-.dot-t[data-t=rig]{background:var(--mint);border-color:var(--mint)}
-.dot-t[data-t=tex]{background:var(--apricot);border-color:var(--apricot)}
-.dot-t[data-t=art]{background:var(--lilac-bg);border-color:var(--lilac)}
-.dot-t[data-t=ref]{border-color:var(--slate);border-style:dashed}
-.sp-imgs{display:flex;flex-wrap:wrap;gap:.65rem}
-.tile{width:104px;border-radius:13px;overflow:hidden;background:var(--bg);transition:transform .26s var(--ease),box-shadow .26s var(--ease)}
+.sp-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:.7rem}
+.tile{margin:0;border-radius:13px;overflow:hidden;background:var(--bg-2);aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
 .tile.has{cursor:zoom-in}
 .tile.has:hover{transform:translateY(-4px);box-shadow:var(--shadow-m)}
-.tile .ph,.tile img{display:block;width:100%;height:104px;object-fit:contain}
-.tile img{background:linear-gradient(160deg,var(--sky-bg),var(--lilac-bg));transition:transform .32s var(--ease)}
-.tile.has:hover img{transform:scale(1.08)}
-.tile .ph{display:grid;place-items:center;background:var(--bg-2);border:2px dashed var(--rule);border-radius:13px 13px 0 0;color:var(--ink-faint);font:700 .68rem Nunito,sans-serif}
-.tile figcaption{padding:.36rem .45rem .5rem;text-align:center;font:600 .68rem/1.3 Nunito,sans-serif;color:var(--ink-soft)}
-.tile.miss figcaption{color:var(--ink-faint)}
-.lightbox{position:fixed;inset:0;background:rgba(63,53,87,.72);backdrop-filter:blur(6px);display:none;place-items:center;padding:2rem;z-index:50}
-.lightbox.on{display:grid;animation:fade .22s var(--ease)}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.lightbox img{max-width:min(92vw,620px);max-height:86vh;border-radius:18px;box-shadow:var(--shadow-l);background:var(--card)}
-.lightbox p{color:#fff;text-align:center;margin:.9rem 0 0;font:600 .92rem Nunito,sans-serif}
+.tile img{width:100%;height:100%;object-fit:contain;display:block}
+.tile.miss{border:1px dashed var(--line);background:transparent}
+.tile figcaption{position:absolute;bottom:0;left:0;right:0;font:600 .64rem/1 Nunito,sans-serif;text-align:center;padding:.3rem;background:rgba(255,255,255,.86);color:var(--ink-soft)}
+.tile.miss figcaption{position:static;background:none;color:var(--ink-faint)}
 
+.lb{position:fixed;inset:0;background:rgba(40,32,60,.82);display:none;align-items:center;justify-content:center;z-index:50;padding:2rem;cursor:zoom-out}
+.lb.on{display:flex}
+.lb img{max-width:min(92vw,900px);max-height:86vh;border-radius:16px;background:var(--card)}
+.lb span{position:absolute;bottom:1.4rem;left:0;right:0;text-align:center;color:#fff;font:600 .86rem var(--mono)}
 
-/* ---------- named roster ---------- */
-.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:.7rem;margin:.6rem 0 1.6rem}
-.cr{background:var(--card);border-radius:14px;padding:.65rem .8rem;box-shadow:var(--shadow-s);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
-.cr:hover{transform:translateY(-3px);box-shadow:var(--shadow-m)}
-.cr b{display:block;font:700 .92rem/1.3 Nunito,sans-serif}
-.cr span{display:inline-block;font:700 .62rem/1 Nunito,sans-serif;padding:.2rem .42rem;border-radius:99px;margin:.32rem .22rem 0 0;background:var(--bg-2);color:var(--ink-soft)}
-.cr span.k{background:var(--lilac-bg);color:#7b52c8}
-.lines{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.8rem;margin:.6rem 0 1.5rem}
-.ln{background:var(--card);border-radius:14px;padding:.7rem .9rem;box-shadow:var(--shadow-s);font-size:.88rem}
-.ln b{font-weight:700}
-.ln em{font-style:normal;color:var(--ink-faint)}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0 1.5rem}
-.chips i{font-style:normal;font:600 .8rem/1 Nunito,sans-serif;background:var(--card);box-shadow:var(--shadow-s);padding:.42rem .7rem;border-radius:99px}
-
-
-/* ---------- codenames ---------- */
-.pairs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;margin:.6rem 0 1.6rem}
-.pr{background:linear-gradient(135deg,var(--mint-bg),var(--card));border-radius:14px;padding:.7rem .85rem;box-shadow:var(--shadow-s);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
-.pr:hover{transform:translateY(-3px);box-shadow:var(--shadow-m)}
-.pr code{background:none;padding:0;font:700 .82rem var(--mono);color:var(--ink-faint);display:block}
-.pr b{font:700 1rem/1.3 Nunito,sans-serif;display:block;margin-top:.15rem}
-.codes{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:.8rem;margin:.6rem 0 1.5rem}
-.cd{background:var(--card);border-radius:14px;padding:.75rem .9rem;box-shadow:var(--shadow-s);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
-.cd:hover{transform:translateY(-3px);box-shadow:var(--shadow-m)}
-.cd b{font:700 .98rem/1.3 Nunito,sans-serif;color:#8a63d8}
-.cd em{font-style:normal;font:500 .74rem var(--mono);color:var(--ink-faint);float:right}
-.cd span{display:block;margin-top:.35rem;font:500 .78rem var(--mono);color:var(--ink-soft);line-height:1.5}
-
-
-/* ---------- solved roster ---------- */
-.solved{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:.9rem;margin:.7rem 0 1.6rem}
-.sf{background:var(--card);border-radius:16px;padding:.85rem 1rem;box-shadow:var(--shadow-s);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
-.sf:hover{transform:translateY(-4px);box-shadow:var(--shadow-m)}
-.sf>h5{margin:0 0 .5rem;font:700 .74rem/1 var(--mono);color:var(--ink-faint);letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline}
-.sf>h5 i{font-style:normal;color:#8a63d8;font-weight:700}
-.sf ul{list-style:none;margin:0;padding:0}
-.sf li{display:flex;gap:.55rem;align-items:baseline;padding:.2rem 0;border-top:1px solid var(--line)}
-.sf li:first-child{border-top:0}
-.sf li code{background:none;padding:0;font:600 .74rem var(--mono);color:var(--ink-faint);min-width:3.4em}
-.sf li b{font:700 .9rem/1.3 Nunito,sans-serif}
-
-
-/* ---------- systems grid ---------- */
-.sysgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:.85rem;margin:.7rem 0 1.8rem}
-.sy{background:var(--card);border-radius:16px;padding:.85rem 1rem;box-shadow:var(--shadow-s);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
-.sy:hover{transform:translateY(-4px);box-shadow:var(--shadow-m)}
-.sy h5{margin:0 0 .2rem;font:700 .98rem/1.3 Nunito,sans-serif;display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
-.sy h5 em{font-style:normal;font:700 .74rem var(--mono);color:#8a63d8;background:var(--lilac-bg);padding:.16rem .44rem;border-radius:99px}
-.sy p{margin:.35rem 0 0;font:500 .72rem/1.6 var(--mono);color:var(--ink-faint);word-break:break-word}
-
-@media (max-width:880px){
-  .shell{grid-template-columns:1fr}
-  .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:1rem;padding:1.6rem 1.3rem}
-  .rail nav{flex-direction:row;flex-wrap:wrap}
-  .rail footer{margin:0;flex-basis:100%}
-  main{padding:1.4rem 1.3rem 4rem}
-  .hero{padding:1.6rem 1.3rem;border-radius:20px}
-  .hero h2{font-size:1.85rem}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;transition-duration:.001ms!important}
-  .cell{opacity:1;transform:none}
-  .card{opacity:1}
-}
+footer{text-align:center;color:var(--ink-faint);font:500 .76rem/1.7 var(--mono);margin-top:2.6rem}
+@media (max-width:600px){ .wrap{padding:2rem 1rem 3rem} h1{font-size:1.7rem} }
 </style>
 </head>
 <body>
-<div class="shell">
-
-<aside class="rail">
-  <div>
-    <p class="mark"><span class="dot"></span>Aniimo Survey</p>
-    <div class="build">client 1.0.0.281<br>pre-download · 14 Sep 2026</div>
-  </div>
-  <nav id="nav">
-    <a href="#census">Census</a>
-    <a href="#client">The client</a>
-    <a href="#species">Species</a>
-    <a href="#forms">Forms</a>
-    <a href="#names">Names</a>
-    <a href="#roster">Roster</a>
-    <a href="#codenames">Codenames</a>
-    <a href="#systems">Systems</a>
-    <a href="#open">Open questions</a>
-    <a href="#gallery">Artwork</a>
-    <a href="#method">Method</a>
-  </nav>
-  <footer>Read from pre-download files with the game closed. No server data, no memory access.</footer>
-</aside>
-
-<main>
-
-<!-- ============ HERO ============ -->
-<section class="hero" id="census">
-  <h2>182 creature IDs, 97 playable</h2>
-  <p class="sub">Every square is a creature ID found in the client manifest. How it's filled in shows how far production got: rigged model, textures only, compendium artwork, or a bare mention. Hover any square for its ID.</p>
-
-  <div class="census" id="censusGrid"></div>
-
-  <div class="legend">
-    <div><span class="swatch rig"></span><b>Rigged — 98</b><span>Skeleton, textures and artwork all present. Playable.</span></div>
-    <div><span class="swatch tex"></span><b>Textures only — 12</b><span>Partial 3D assets, no skeleton yet.</span></div>
-    <div><span class="swatch art"></span><b>Artwork only — 31</b><span>Compendium illustration, nothing in 3D.</span></div>
-    <div><span class="swatch ref"></span><b>Mentioned — 41</b><span>ID referenced, no assets attached.</span></div>
-  </div>
-</section>
-
-<!-- ============ CLIENT ============ -->
-<section id="client">
-  <h2>The client</h2>
-  <p class="lede">What ships in the pre-download, and what can be read from it.</p>
-
-  <table>
-    <tr><th>Item</th><th>Reading</th></tr>
-    <tr><td>Engine</td><td>Unity 2022.3.62f1, IL2CPP backend</td></tr>
-    <tr><td>Rendering</td><td>DX12, DLSS transformer, Streamline</td></tr>
-    <tr><td>Bundles</td><td>YooAsset — 2,075 <code>.uab</code> files, 22.28 GB</td></tr>
-    <tr><td>Anti-cheat</td><td><code>NEPKernel.sys</code>, kernel driver (same as Farlight 84)</td></tr>
-    <tr><td>Publisher stack</td><td>FunPlus — <code>com.funplus.xrender</code>, <code>xgui</code></td></tr>
-    <tr><td>Audio</td><td>Wwise</td></tr>
-    <tr><td>Content version</td><td>3509129</td></tr>
-  </table>
-
-  <h3>Encryption is partial</h3>
-
-  <div class="rec" data-c="conf">
-    <h4>Asset bundles are not encrypted<span class="tag conf">confirmed</span></h4>
-    <p>Every <code>.uab</code> opens with a plain <code>UnityFS</code> signature, format 8. YooAsset's optional encryption was left off, so models, textures and artwork are readable without any key.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>The client config is encrypted<span class="tag conf">confirmed</span></h4>
-    <p><code>ClientConfig.json</code> uses a 16-byte container header whose field at offset 12 holds the payload length. The 2,160-byte payload is a multiple of 16, measures 7.92 bits of entropy per byte across all 256 values, repeats no block, and shows no repeating XOR key at lengths 1 through 16. That points to a block cipher, most likely AES in CBC or CTR mode.</p>
-    <pre>72 bf 3d 6e | a9 07 12 0c | 00 00 00 00 | 70 08 00 00
-     ?              ?             = 0           = 2160</pre>
-  </div>
-</section>
-
-<!-- ============ SPECIES ============ -->
-<section id="species">
-  <h2>Species</h2>
-  <p class="lede">Creatures are called <code>Parmon</code> internally. IDs are five digits: the first four name the family line, the fifth marks a position within it. Two extra digits flag a variant.</p>
-
-  <div class="rec" data-c="conf">
-    <h4>97 species playable at launch<span class="tag conf">confirmed</span></h4>
-    <p>Counted from the skeletons in <code>Res_Export/Character/Avatar</code>. It matches the figure community databases report, while being derived independently of them.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>63 family lines, from 1 to 7 members<span class="tag conf">confirmed</span></h4>
-    <p>Eleven lines hold three members, twelve hold two, eight have no evolution at all. Just one has seven — <code>1002x</code> — which makes it either an unusually large family or a thematic grouping rather than an evolution chain.</p>
-  </div>
-
-  <div class="rec" data-c="lik">
-    <h4>Production stops sharply after ID 1054<span class="tag lik">likely</span></h4>
-    <p>Rigged-model coverage falls from 80% to 15% past that mark. Since IDs are assigned as production proceeds, the cliff looks like a reserve of unfinished content.</p>
-    <table>
-      <tr><th>ID range</th><th class="num">Rigged</th><th class="num">Not rigged</th><th class="num">Coverage</th></tr>
-      <tr><td>1000–1029</td><td class="num">20</td><td class="num">5</td><td class="num">80%</td></tr>
-      <tr><td>1030–1052</td><td class="num">15</td><td class="num">4</td><td class="num">78%</td></tr>
-      <tr><td>1054–1078</td><td class="num">3</td><td class="num">16</td><td class="num">15%</td></tr>
-    </table>
-    <p>Twelve of those species already carry body textures and thirty-one have compendium artwork only. The remaining forty-one are bare mentions, so there is no way to tell whether they are coming or were cut.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>The compendium references 139 species<span class="tag conf">confirmed</span></h4>
-    <p>308 <code>UI_Img_ResearchBook_Enter_&lt;id&gt;</code> images cover 139 distinct IDs against 97 playable ones, so the in-game journal is built for more entries than launch fills.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>A few species have male and female forms<span class="tag conf">confirmed</span></h4>
-    <p>Species 10161 and 10162 carry separate <code>_Male</code> and <code>_Female</code> artwork — eleven images for 10161 alone. No other species does. Casing drifts between files (<code>10161female</code>, <code>10161_Male</code>), which suggests conventions were never harmonised between artists.</p>
-  </div>
-</section>
-
-<!-- ============ FORMS ============ -->
-<section id="forms">
-  <h2>Forms</h2>
-  <p class="lede">Names taken from body and eye texture filenames, once technical map suffixes are stripped out.</p>
-
-  <table>
-    <tr><th>Form</th><th class="num">Occurrences</th><th>Note</th></tr>
-    <tr><td>Shiny</td><td class="num">157</td><td>By far the most common</td></tr>
-    <tr><td>Demonic</td><td class="num">81</td><td></td></tr>
-    <tr><td>DarkShiny</td><td class="num">74</td><td></td></tr>
-    <tr><td>Default</td><td class="num">39</td><td>Base form, named explicitly</td></tr>
-    <tr><td>Rampage</td><td class="num">27</td><td>Not publicly documented</td></tr>
-    <tr><td>Old</td><td class="num">7</td><td></td></tr>
-    <tr><td>ClearCrystal</td><td class="num">6</td><td>Crystalline parallax map</td></tr>
-    <tr><td>Heart</td><td class="num">5</td><td></td></tr>
-    <tr><td>WhiteShiny · BlackShiny · Harden</td><td class="num">1</td><td>One occurrence each</td></tr>
-  </table>
-
-  <div class="rec" data-c="open">
-    <h4>Internal names say neither Prismana nor Umbra<span class="tag open">to verify</span></h4>
-    <p>Both names have circulated in the community since the betas, yet neither appears in any filename. <code>ClearCrystal</code> is the strongest candidate for Prismana, and <code>Demonic</code> or <code>DarkShiny</code> for the dark family. The mapping still has to be established in game.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>The compendium has a forms tab<span class="tag conf">confirmed</span></h4>
-    <p>Interface assets <code>UI_PetManual_Button_NormalForm</code>, <code>Button_StarryForm</code> and <code>Button_Transform</code> point to a form-switching system, with a dedicated page (<code>UI_Pb_PetManual_FormPage</code>) separating basic from advanced forms.</p>
-  </div>
-</section>
-
-<section id="names">
-  <h2>Names</h2>
-  <p class="lede">The English text table holds 112,065 strings. Creature names were isolated by a marker test: only creatures are ever prefixed with a form word (Alpha, Umbral, Prismana, Omega) or suffixed with Family, Relic or Egg. No interface label collects those.</p>
-
-  <div class="rec" data-c="conf">
-    <h4>71 creatures named<span class="tag conf">confirmed</span></h4>
-    <p>Each name below carries at least two independent markers, which rules out interface strings. The chips show which markers were found.</p>
-  </div>
-
-  <div class="roster" id="roster"></div>
-
-  <h3>Named family lines</h3>
-  <p>Twenty-eight lines appear in the text as "&lt;name&gt; Family", which is the game's own grouping of an evolution chain.</p>
-  <div class="chips" id="fams"></div>
-
-  <div class="rec" data-c="lik">
-    <h4>Evolution chains, reconstructed from name stems<span class="tag lik">likely</span></h4>
-    <p>Shared prefixes line up with the four-digit line prefixes found in the asset IDs, so these chains are probable but not proven. The order within each chain is inferred from name length and evolution conventions.</p>
-  </div>
-
-  <div class="lines" id="lines"></div>
-
-  <div class="rec" data-c="open">
-    <h4>Which name belongs to which ID<span class="tag open">unresolved</span></h4>
-    <p>Text entries are addressed by 32-bit hashes, and no hash function tested (CRC32, FNV-1, FNV-1a, djb2, sdbm, masked and unmasked) matched more than a handful of the 66,882 known identifiers. The one file that holds both the name keys and the creature data, <code>pmdata.bin</code>, turns out to be a serialised Lua heap dump: 32-bit pointers and inline doubles, not record arrays. Mapping names to IDs would mean rebuilding the heap layout, which is out of proportion to the two days left before the names are simply readable in the game.</p>
-  </div>
-</section>
-
-<section id="roster">
-  <h2>The roster, named and numbered</h2>
-  <p class="lede">Every creature in the game carries a compendium number alongside its display name, and both sit in the same record inside the game's design-data blob. Recovering one gives the other.</p>
-
-  <div class="rec" data-c="conf">
-    <h4>93 creatures mapped to their asset ID<span class="tag conf">confirmed</span></h4>
-    <p>The blob stores 109,087 text keys in its record region, against 705 expected by chance. Names cluster with a stable numeric field that repeats identically across every occurrence of a creature, hundreds of kilobytes apart. That field is the compendium number, and the asset ID follows from it directly.</p>
-  </div>
-
-  <div class="solved" id="solved"></div>
-
-  <div class="rec" data-c="conf">
-    <h4>The mapping validates against three independent sources<span class="tag conf">confirmed</span></h4>
-    <p>Besauce at 10122, Blazen at 10222, Infergon at 10025 and Helgon at 10023 were each recovered earlier from animation clip and boss script filenames, by a method that shares nothing with this one. All four agree. The Iris line — 10211, 10212, 10213 — had been predicted from name length alone and lands exactly.</p>
-    <p>Family codenames agree too, across all 34 lines: the Crab line holds Budclaw, Shrubclaw and Geoclaw; ShellStar holds Shelly, Sheldon and Sherro; DungBeetle holds Baleetle and Waleetle; SleepyBear holds Cubbo and Grizbo. Thirty-four lines, no mismatch.</p>
-  </div>
-
-  <div class="rec" data-c="lik">
-    <h4>Two earlier claims corrected<span class="tag lik">revised</span></h4>
-    <p>10022 and 10024 were previously attributed to Helgon because his animation clips appear in their asset lists. That was a shared asset, not a name. They are Helmwhelp and Jawling. The record data is the stronger source and supersedes the filename inference.</p>
-  </div>
-</section>
-
-<section id="codenames">
-  <h2>Internal codenames</h2>
-  <p class="lede">Artists name their animation clips after what the creature actually is. Those names survive in the asset paths, which makes them readable without touching a single encrypted file.</p>
-
-  <div class="rec" data-c="conf">
-    <h4>Ten IDs matched to a display name<span class="tag conf">confirmed</span></h4>
-    <p>Each of these appears written out in an animation clip or a boss script filename, and each matches a name independently confirmed in the text table. Two examples: <code>ST_Monster_AutoCombat_Boss_10222_BLAZEN.lua</code> and <code>OMap_Parmon_10025_Infergon</code>.</p>
-  </div>
-
-  <div class="pairs" id="pairs"></div>
-
-  <div class="rec" data-c="conf">
-    <h4>32 family lines carry a codename<span class="tag conf">confirmed</span></h4>
-    <p>Every clip in a line shares one descriptor, which identifies what the family is even where the commercial name is unknown. 87 of the 97 playable IDs are covered.</p>
-  </div>
-
-  <div class="codes" id="codes"></div>
-
-  <div class="rec" data-c="lik">
-    <h4>The Iris line resolves completely<span class="tag lik">likely</span></h4>
-    <p>The text table holds Iris, Irisal and Irisalis; line <code>1021x</code> has exactly three members; and all three carry the Iris codename. The order follows name length, which makes 10211 Iris, 10212 Irisal and 10213 Irisalis. The <code>1002x</code> line works the same way, with Helm on 10021, 10026 and 10027 and Helgon on 10022 through 10025, against Helmut, Helmwhelp, Helgon, Helion and Hellsoul in the text.</p>
-  </div>
-
-  <div class="rec" data-c="open">
-    <h4>Codenames are descriptors, not display names<span class="tag open">caveat</span></h4>
-    <p>Otter, Crab, Seagull and Godzilla are what the art team called these creatures internally. They say what each family is, not what players will see on screen. Only the ten pairs above are actual display names.</p>
-  </div>
-</section>
-
-<!-- ============ SYSTEMS ============ -->
-<section id="systems">
-  <h2>Systems</h2>
-  <p class="lede">The design-data index names 972 tables in plain text. Table names are written by the people who build the features, so the index doubles as a table of contents for the whole game.</p>
-
-  <div class="rec" data-c="conf">
-    <h4>Twenty systems, 730 of the 972 tables<span class="tag conf">confirmed</span></h4>
-    <p>Grouped by name prefix below. The count beside each system is how many tables it owns, which is a fair proxy for the machinery behind it. Creature handling leads with 136; the homeland and its camping car take 101, more than the roguelike, PvP, Boss Rush and Egg Snatch combined. The 242 names left over are engine plumbing — triggers, scenes, resource maps, input bindings.</p>
-  </div>
-
-  <div class="sysgrid" id="sysgrid"></div>
-
-  <h3>What the names tell us</h3>
-
-  <div class="rec" data-c="conf">
-    <h4>Egg Snatch is a full mode, not a side activity<span class="tag conf">confirmed</span></h4>
-    <p>Thirty-three tables cover it, including chips and chip slots, equipment, weapon durability with a consume rate, a repair kit, a talent tree, a calcination system for collections, and a daily-refreshing ranked ladder with its own reward boxes. The Lua scripts add a team lobby for it.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>The roguelike runs on dice and a book<span class="tag conf">confirmed</span></h4>
-    <p>Thirty-seven tables: dice, room affixes, random events with branching options, a multi-level talent tree, difficulty tiers, seasons, a weekly boss with its own rewards, and a "rogue book" holding bosses, buffs and events. A separate transform table suggests creatures change during a run.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Homeland is the largest non-creature system<span class="tag conf">confirmed</span></h4>
-    <p>A hundred and one tables covering plots, buildings, blueprints, furniture placement, a crafting formula system with random outcomes and periods, a material shop, a lottery, trash, orders, and a seasonal layer with celebrations, collections and mutations. The camping car alone has ten tables for components, upgrades, plates and interior models.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Fishing capture is its own minigame<span class="tag conf">confirmed</span></h4>
-    <p>Ten tables with balls and ball values, battle grades, a petal source, progress and reward-progress tracks, and a time table. The debug strings mention tickets, floors, energy and catches, and a CRIT distribution — so it is scored, not just flavour.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Catch rate is computed, not fixed<span class="tag conf">confirmed</span></h4>
-    <p>Five tables feed the catch probability: the creature's AI state, its AI tags, its entity tags, and any buffs on it each carry their own modifier table. So approaching a creature unnoticed, or applying a status first, changes the odds. A separate absorb table and a lucky-reward display round it out.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Boss Rush and Catch Rogue are separate modes<span class="tag conf">confirmed</span></h4>
-    <p>Boss Rush has fourteen tables: buffs, cycles, grades, levels, seasons and their rewards, plus its own UI tags. Catch Rogue has seven more — buffs, phases, levels with finish conditions, NPCs and rewards — and sits apart from the main roguelike tables. Two distinct run-based modes, not one.</p>
-  </div>
-
-  <div class="rec" data-c="lik">
-    <h4>A chemistry layer in the world<span class="tag lik">likely</span></h4>
-    <p>Chemistry element tables sit beside material reaction, voxel reaction and tag reaction tables, with a chemical material template exported from the editor. Read together, they point at elemental interactions playing out on world objects rather than only in combat — wet grass conducting electricity, that kind of thing. The names support the shape; nothing seen so far confirms the specifics.</p>
-  </div>
-
-  <div class="rec" data-c="lik">
-    <h4>Smaller systems worth naming<span class="tag lik">likely</span></h4>
-    <p>A piano with music, selection and timbre tables. Quizzes in single and multiple-choice form with a question bank. A photo studio with lighting, filters, ornaments, DIY presets and a "wonderful replay" capture. NPC duels tied to map marks. Vehicles with seats and seat skills. A world racing track. A tree-climbing table. A badge system in five tables. And a decibel grade table, which has no obvious counterpart in anything seen so far.</p>
-  </div>
-
-  <h3>From the interface</h3>
-
-  <div class="rec" data-c="conf">
-    <h4>Catching has ten distinct types<span class="tag conf">confirmed</span></h4>
-    <p>Normal, Boss, Behind, Group, Leader, Once, Flash, Rainbow, ShiningStar and LevelA, each with its own icon. Boss catching uses a separate ball asset from the standard one.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Gear rarities and chips<span class="tag conf">confirmed</span></h4>
-    <p>Five rarities — white, green, blue, purple, gold — and two chip families, arm and weapon, in five categories each.</p>
-  </div>
-
-  <div class="rec" data-c="conf">
-    <h4>Named characters<span class="tag conf">confirmed</span></h4>
-    <p>Bohr, Sorora, Fernanda, Ling, Nicole, Levi, Oswen, Sunia, Anthi, Sisus and Elder Jaeger all have dedicated animation sets. Three creatures carry a character name in their asset path: 10194 with Lita, 10213 with Irelia, 10233 with Velouria, 10221 with Frizz and 10323 with Knight.</p>
-  </div>
-</section>
-
-<!-- ============ OPEN ============ -->
-<section id="open">
-  <h2>Open questions</h2>
-  <p class="lede">What is still unresolved, most interesting first.</p>
-
-  <div class="rec" data-c="open">
-    <h4>The 202xx series<span class="tag open">to verify</span></h4>
-    <p>Two compendium images carry IDs 2021102 and 2021203. That series appears nowhere else — not in the Parmon list, not as a skeleton, not as a texture. An entire family absent from the rest of the client, and the strangest thing in this survey.</p>
-    <p>Species 10193 is a quieter version of the same oddity: it sits between 10192 and 10194, has journal artwork, and yet never appears under a <code>Parmon_</code> path. Three IDs in total are known only through the compendium, which is why the census counts 182 rather than 179.</p>
-  </div>
-
-  <div class="rec" data-c="open">
-    <h4>Display names<span class="tag open">to verify</span></h4>
-    <p>Everything is indexed by numeric ID. The lookup table to commercial names sits in the localisation bundles, which are reachable since nothing there is encrypted. This is the step that makes the whole survey readable to an audience.</p>
-  </div>
-
-  <div class="rec" data-c="open">
-    <h4>The <code>lua</code> folder<span class="tag open">to verify</span></h4>
-    <p>14 <code>.bin</code> files totalling 200 MB. If that is decompilable Lua bytecode it holds gameplay logic — damage formulas, evolution conditions, encounter tables. Not yet inspected.</p>
-  </div>
-
-  <div class="rec" data-c="open">
-    <h4>Empty partitions<span class="tag open">to verify</span></h4>
-    <p>Partition files <code>water_26</code> and <code>fire_27</code> weigh 137 bytes against 858 KB for <code>ark_25</code>. They are numbered in sequence but hold nothing. Four <code>test1</code>–<code>test4</code> partitions are in the same state.</p>
-  </div>
-
-  <div class="rec" data-c="open">
-    <h4>The 41 IDs with no assets<span class="tag open">to verify</span></h4>
-    <p>Nothing separates upcoming content from cut content here. Low IDs (10082, 10101, 10113) are more likely abandoned; high ones (10631 through 10783) more likely held in reserve.</p>
-  </div>
-
-  <h3>How to phrase this publicly</h3>
-  <p>The defensible wording stays descriptive: the compendium references 139 species while 97 are playable at launch, and 12 of the rest already carry partial 3D assets. Announcing "60 new creatures confirmed" does not hold — this survey cannot separate what is coming from what was dropped.</p>
-</section>
-
-<!-- ============ GALLERY ============ -->
-<section id="gallery">
-  <h2>Compendium artwork</h2>
-  <p class="lede">All 139 species the journal knows about, grouped by family line and ordered by ID. Empty slots are artwork the manifest lists but your folder does not have. Drop your extraction folder to fill them in, and type display names as you identify them.</p>
+<div class="wrap">
+  <header>
+    <div class="logo"></div>
+    <h1>Compendium Artwork</h1>
+    <p class="sub">Aniimo &middot; client 1.0.0.281 &middot; pre-download</p>
+  </header>
 
   <div class="drop" id="drop">
-    <button class="btn" id="pick">Choose artwork folder</button>
-    <p>Or drag the PNGs straight in. Files stay in your browser and are never uploaded.</p>
-    <input type="file" id="file" multiple accept="image/*" webkitdirectory directory hidden>
+    <b>Drop your extraction folder here</b>
+    Images are read in your browser. Nothing is uploaded.
   </div>
 
-  <div class="gal-bar" id="bar">
-    <input type="search" id="q" placeholder="Filter by ID, name or form" aria-label="Filter artwork">
-    <span class="count" id="count"></span>
-    <button class="btn ghost" id="export">Save names</button>
-    <button class="btn ghost" id="clear">Clear images</button>
+  <div class="gal-bar" id="bar" hidden>
+    <input type="search" id="q" placeholder="Filter by ID, name or form" aria-label="Filter">
+    <span class="pill" id="count"></span>
   </div>
 
   <div id="tree"></div>
-</section>
 
-<!-- ============ METHOD ============ -->
-<section id="method">
-  <h2>Method</h2>
-  <p class="lede">Everything here comes from reading files offline, game closed, on a copy of the install folder. No debugger, no injection, no memory access.</p>
-
-  <h3>Primary source</h3>
-  <p>The content manifest — 25.7 MB of plain text, one asset path per line:</p>
-  <pre>Aniimo_Data/cvs/res/patchv2/res/ver/3509129/win/
-  PackageManifest_assetxbt_DefaultPackage_3509129_stab.txt</pre>
-  <p>The <code>ver/3509129</code> segment is versioned per build. A new folder appears with every patch, which makes it possible to diff manifests and isolate exactly what an update adds.</p>
-
-  <h3>Artwork extraction</h3>
-  <pre>PAT = re.compile(r'ResearchBook_Enter', re.I)</pre>
-  <p>Walk all 2,075 bundles with UnityPy, keep Texture2D and Sprite objects whose name matches, write them out as PNG.</p>
-  <h3>Text and script archives</h3>
-  <p>Game scripts ship in <code>LuaScripts.xdf</code>, a plain ZIP holding 8,608 uncompressed Lua files, indexed by a readable JSON manifest in <code>LuaScripts.xdt</code>. Compiled scripts are LuaJIT 2.0 bytecode (magic <code>1B 4C 4A 02</code>) and still carry the studio's source paths in their headers.</p>
-  <p>Localisation is split in two: <code>NewTextMap_&lt;lang&gt;.json</code> maps a hash to an <code>[offset, length]</code> pair, and <code>Compress_&lt;lang&gt;.bin</code> holds the UTF-8 bytes those pairs point into. Fifteen languages ship, English included.</p>
-  <pre>off, ln = index[key]
-text    = blob[off:off+ln].decode("utf-8")</pre>
-
-  <h3>Diffing the launch patch</h3>
-  <p>The content manifest lives under <code>ver/&lt;build&gt;/</code>, so the launch build will land beside 3509129 rather than replacing it. Keeping a copy of the current manifest makes the first diff a one-line comparison, and that diff is the cleanest way to see exactly what day-one adds.</p>
-</section>
-
-</main>
+  <footer>Grouped by family line and ordered by ID.</footer>
 </div>
 
+<div class="lb" id="lb"><img id="lbimg" alt=""><span id="lbcap"></span></div>
+
 <script>
-const CLS = {"10000":"ref","10011":"rig","10012":"rig","10013":"art","10021":"rig","10022":"rig","10023":"rig","10024":"rig","10025":"rig","10026":"rig","10027":"rig","10031":"rig","10032":"rig","10033":"rig","10041":"rig","10042":"rig","10043":"rig","10045":"rig","10051":"rig","10052":"rig","10053":"rig","10055":"rig","10071":"art","10072":"art","10081":"art","10082":"ref","10083":"art","10101":"ref","10113":"ref","10114":"ref","10122":"rig","10131":"rig","10132":"rig","10133":"rig","10141":"rig","10142":"rig","10143":"rig","10144":"rig","10151":"art","10152":"ref","10153":"ref","10161":"rig","10162":"rig","10163":"rig","10171":"rig","10172":"rig","10173":"rig","10174":"rig","10181":"rig","10183":"ref","10184":"rig","10185":"rig","10187":"rig","10191":"rig","10192":"rig","10193":"art","10194":"rig","10195":"art","10201":"rig","10203":"rig","10207":"rig","10211":"rig","10212":"rig","10213":"rig","10221":"rig","10222":"rig","10223":"art","10231":"rig","10232":"rig","10233":"rig","10241":"rig","10261":"rig","10262":"rig","10263":"rig","10281":"rig","10282":"rig","10283":"rig","10284":"rig","10285":"rig","10291":"rig","10293":"rig","10311":"rig","10313":"ref","10314":"ref","10321":"rig","10323":"rig","10324":"rig","10331":"rig","10333":"rig","10351":"rig","10352":"rig","10361":"rig","10363":"rig","10371":"rig","10373":"rig","10381":"tex","10383":"tex","10391":"art","10393":"art","10401":"art","10403":"rig","10421":"tex","10423":"rig","10431":"rig","10433":"rig","10434":"tex","10441":"rig","10443":"rig","10444":"art","10451":"rig","10453":"rig","10454":"rig","10461":"tex","10463":"tex","10464":"tex","10471":"rig","10474":"rig","10475":"rig","10481":"rig","10483":"rig","10491":"art","10493":"art","10501":"rig","10503":"rig","10511":"rig","10512":"rig","10513":"art","10541":"art","10543":"art","10544":"ref","10561":"art","10563":"art","10564":"art","10565":"ref","10571":"ref","10573":"ref","10574":"ref","10581":"tex","10583":"tex","10584":"rig","10591":"art","10593":"art","10594":"tex","10601":"art","10603":"art","10604":"art","10611":"art","10613":"rig","10614":"art","10621":"tex","10623":"rig","10631":"ref","10633":"ref","10641":"ref","10643":"ref","10644":"ref","10651":"tex","10653":"ref","10661":"ref","10663":"ref","10664":"ref","10671":"ref","10673":"ref","10674":"ref","10681":"ref","10683":"ref","10691":"ref","10693":"ref","10694":"ref","10699":"ref","10713":"ref","10723":"ref","10761":"ref","10763":"ref","10783":"ref","16163":"ref","20211":"art","20212":"art","69993":"rig","80023":"ref","90207":"art","90213":"ref"};
-
-/* ---- census grid, one orchestrated reveal ---- */
-const censusGrid = document.getElementById('censusGrid');
-Object.keys(CLS).sort().forEach((id, i) => {
-  const d = document.createElement('div');
-  d.className = 'cell';
-  d.dataset.t = CLS[id];
-  d.dataset.id = id;
-  d.textContent = id.slice(-2);
-  d.style.animationDelay = Math.min(i * 5, 900) + 'ms';
-  censusGrid.appendChild(d);
-});
-
-/* ---- scroll spy ---- */
-const links = [...document.querySelectorAll('#nav a')];
-const spy = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if(!e.isIntersecting) return;
-    links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
-  });
-}, {rootMargin:'-18% 0px -70% 0px'});
-document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
-
-
-
-
-
-/* ---- systems grid ---- */
-const SYS = {"Creature systems":["common_pet_group_data","core_carry_data","core_carry_family_data","core_carry_level_data","exchange_pet_data","pamon_sensor_behavior_condition_data","pamon_sensor_env_data","pamon_sensor_pamon_data","pamon_sensor_player_data","parmon_behavior_data","parmon_behavior_group_data","parmon_competition_data","pet_ability_ex_data","pet_ability_index_data","pet_accessory_transform_data","pet_all_prototype_list","pet_appearance_action_data","pet_appearance_point_data","pet_attr_convert_data","pet_attribute_desc","pet_avatar_data","pet_ball_config_data","pet_ball_data","pet_base_prop_attr_names","pet_base_prototype_data","pet_base_prototype_to_prototype_map","pet_behavior_config_data","pet_behavior_level_data","pet_body_entry_data","pet_breed_data","pet_capture_report_sort_data","pet_challenge_data","pet_character_data","pet_character_ex_data","pet_chat_condition_data","pet_chat_condition_params_data","pet_chat_data","pet_config_data","pet_const_source_data","pet_data","pet_detail_property_data","pet_dispatch_data","pet_display_attr_names","pet_ethnic_group_data","pet_ethnic_to_prototype_map","pet_evolve_camera_pos_data","pet_evolve_data","pet_evolve_item_sub_data","pet_evolve_listen_map","pet_evolve_reverse_relation","pet_exercise_data","pet_family_data","pet_favorite_type_data","pet_feed_data","pet_feed_item_data","pet_fetter_data","pet_first_show_data","pet_form_change_data","pet_form_skill_data","pet_form_text_data","pet_form_type_data","pet_hatch_egg_cube_data","pet_hatch_egg_data","pet_hatch_egg_label_data","pet_head_icon_info","pet_individuation_data","pet_interactive_template_data","pet_intimacy_level_data","pet_level_data","pet_log_source_data","pet_manual_icon_info","pet_mood_data","pet_nature_data","pet_other_entity_interact_data","pet_perceptibility_data","pet_pet_interact_data","pet_pet_interact_friend_data","pet_photo_reaction_data","pet_photo_weight_data","pet_photo_weight_special_data","pet_player_state_data","pet_price_factor_data","pet_prop_learn_data","pet_prop_level_data","pet_prop_level_max","pet_prototype_data","pet_prototype_to_block_map","pet_pvp_template_data","pet_random_text_data","pet_release_data","pet_resonance_data","pet_resonance_property_data","pet_robot_data","pet_sensor_behavior_condition_data","pet_sensor_env_data","pet_sensor_pamon_data","pet_sensor_player_data","pet_shiny_style_data","pet_skill_client_data","pet_skill_data","pet_skill_learn_map","pet_species_desc_data","pet_strength_recommend_data","pet_talent_all_weight_data","pet_talent_data","pet_talent_group_data","pet_talent_group_to_grp_ids","pet_talent_group_to_ids","pet_talent_pool_to_ids","pet_talent_random_group_data","pet_talent_stage_weight_revert_data","pet_to_puppet_catch_map","pet_trait_data","pet_trait_photo_data","pet_visual_range_data","pet_visual_target_group_data","puppet_data","puppet_data1","puppet_data2","puppet_data3","puppet_interactive_template_data","puppet_percept_group_define_data","puppet_perceptgroup_data","puppet_perceptibility_data","puppet_player_state_data","puppet_response_bind_data","puppet_sensor_behavior_condition_data","puppet_sensor_env_data","puppet_sensor_pamon_data","puppet_sensor_player_data","puppet_visual_range_data","recommend_pet_data","recommend_pet_post_data","send_pet_data","speed_check_pet_data","tmp_pet_template_data"],"Catching":["bait_data","capture_alert_template_data","catch_absorb_data","catch_config_data","catch_display_data","catch_lucky_reward_display_data","catch_prob_ai_state_data","catch_prob_ai_tag_data","catch_prob_buff_tag_data","catch_prob_data","catch_prob_entity_tag_data"],"Compendium & research":["book_progress_reward_data","college_guide_page_data","college_guide_subpage_data","country_area_data","country_area_index_data","country_config_data","egg_book_antique_data","egg_book_group_data","egg_book_reward_data","handbook_vb_config_data","knowledge_assets_data","knowledge_category_data","knowledge_clauses_data","knowledge_contents_data","knowledge_index_data","knowledge_total_data","knowledge_viewable_data","nation_config_data","pet_handbook_catagory_data","pet_handbook_config_data","pet_handbook_content_data","pet_handbook_to_prototype_map","pet_research_avatar_data","pet_research_catch_data","pet_research_content_data","pet_research_country_collect_data","pet_research_country_form_list","pet_research_country_level_data","pet_research_country_species_collect_data","pet_research_country_species_list","pet_research_evolution_data","pet_research_habbit_data","pet_research_id_to_number","pet_research_interact_display_data","pet_research_level_data","pet_research_number_to_id","pet_research_photo_data","pet_research_position_data","pet_research_report_sort_data","pet_research_result_data","pet_research_reward_data","pet_research_species_country_set","pet_research_target_data","pet_research_track_data","plant_book_data"],"Homeland & camping car":["camp_data","compose_furniture_data","design_workshop_consume_data","design_workshop_data","free_placement_data","home_ability_data","home_ability_level_data","home_addon_data","home_blueprint_data","home_build_data","home_build_link_data","home_camp_car_data","home_camp_data","home_camp_type_data","home_camp_unlock_revert_data","home_car_component_data","home_car_component_tab_data","home_car_component_upgrade_data","home_car_internal_model_data","home_car_modify_data","home_car_modify_model_data","home_car_modify_type_data","home_car_plate_data","home_car_upgrade_data","home_category_lv1_progress_data","home_event_owner_to_id_data","home_event_text_data","home_event_type_data","home_event_type_to_id_data","home_extra_anime_data","home_handbook_category_detail","home_handbook_category_lv1_data","home_handbook_category_lv2_data","home_handbook_category_lv3_data","home_handbook_grade_reward_data","home_handbook_homeland_data","home_handbook_item_category_index","home_handbook_ornament_set_data","home_handbook_product_data","home_handbook_season_data","home_handbook_season_item_index","home_item_release_data","home_leisure_behavior_data","home_object_data","home_object_place_data","home_order_data","home_sample_resource_data","home_scene_to_camp_id_data","home_season_celebration_chest_data","home_season_celebration_data","home_season_collection_item_data","home_season_collection_reward_data","home_season_config_data","home_season_daily_task_data","home_season_data","home_season_desc_data","home_season_module_data","home_season_mutation_category_data","home_season_mutation_collection_by_season_data","home_season_mutation_collection_by_type_data","home_season_mutation_collection_data","home_season_mutation_collection_reward_by_season_data","home_season_mutation_collection_reward_data","home_season_prepare_goal_data","home_season_prepare_task_data","home_season_stage_data","home_sub_type_data","home_trash_data","home_type_data","home_upgrade_data","home_wishing_star_collection_data","homeland_area_data","homeland_area_unlock_revert_data","homeland_bgm_data","homeland_config_data","homeland_facility_data","homeland_facility_data_reverse","homeland_food_item","homeland_formula_data","homeland_formula_data_reverse","homeland_formula_period_data","homeland_formula_random_add_data","homeland_formula_random_data","homeland_formula_random_reverse_data","homeland_formula_random_type_data","homeland_item_to_material_data","homeland_lottery_reward_data","homeland_lottery_tier_data","homeland_material_config_data","homeland_material_shop_data","homeland_operate_data","homeland_season_unlock_revert_data","homeland_zone_unlock_config_data","new_home_trash_data","new_homeland_zone_unlock_config_data","revert_home_object_data","revert_home_place_data","revert_home_upgrade_data","space_furniture_data","space_furniture_object_data","temp_camp_data"],"Roguelike":["catch_rogue_buff_data","catch_rogue_level_data","catch_rogue_level_finish_data","catch_rogue_level_reverse_data","catch_rogue_npc_data","catch_rogue_phase_data","catch_rogue_reward_data","level_reward_rogue","property_data_rogue","random_buff_data","random_buff_rarity","random_buff_series_name","rogue__event_battle_data","rogue_book_boss_data","rogue_book_buff_data","rogue_book_event_data","rogue_buff_extend","rogue_buff_level_info","rogue_buff_mapping","rogue_daily_reward_data","rogue_dice_data","rogue_dice_revert_data","rogue_difficulty_data","rogue_init_series_data","rogue_multi_level_talent_data","rogue_random_event_data","rogue_random_event_option_data","rogue_room_affixes_data","rogue_season_data","rogue_talent_condition_data","rogue_talent_data","rogue_talent_level_data","rogue_transform_data","rogue_week_boss_reward_data","roguelike_data","rouge_buff_and_item_mapping","rouge_buff_mapping"],"Boss Rush & team bosses":["boss_gameplay_config_data","boss_mechanism_tip_data","bossrush_buff_data","bossrush_cycle_data","bossrush_fun_data","bossrush_grade_data","bossrush_guanka_data","bossrush_level_mapping_data","bossrush_reward_data","bossrush_season_data","bossrush_season_reward_data","bossrush_ui_tag_data","teamboss_cycle_data","teamboss_season_data"],"Egg Snatch":["egg_id_to_model_res_data","egg_limit_time_refresh_data","egg_limit_time_reward_box_data","egg_limit_time_reward_data","egg_pattern_color_data","egg_pet_equip_hh_data","egg_prompt_intercept_data","egg_random_model_id_data","egg_rank_base_data","egg_rank_daily_box_data","egg_rank_evaluation_data","egg_rank_point_data","egg_rank_reward_data","egg_reward_data","rob_egg_accessory_data","rob_egg_base_data","rob_egg_born_data","rob_egg_chest_data","rob_egg_chest_quality_to_qte_id","rob_egg_collection_calcine_data","rob_egg_collection_calcine_rank_data","rob_egg_collection_tag_data","rob_egg_collection_variant_model_data","rob_egg_item_in","rob_egg_item_out","rob_egg_limit_time_refresh_group","rob_egg_slot_type","rob_egg_talent_data","robegg_chip_data","robegg_chip_slot_data","robegg_equip_data","robegg_repair_kit_data","robegg_weapon_durability_consume_date"],"Fishing capture":["fishing_capture_activity_data","fishing_capture_ball_data","fishing_capture_ball_value_data","fishing_capture_battle_grade_data","fishing_capture_config_data","fishing_capture_petal_source_data","fishing_capture_progress_data","fishing_capture_reward_progress_data","fishing_capture_time_data","fishing_reward_statistics_data"],"PvP & duels":["mark_id_to_npc_duel_id_data","match_data","match_requirement_data","match_rule_data","npc_duel_bg_mapping_data","npc_duel_data","npc_duel_id_to_mark_ids_data","pvp_mode_data","pvp_pet_template_data","pvp_preset_group_data","pvp_rank_data","pvp_template_pet_all_config_data","pvp_template_pet_config_data","pvp_template_pet_skill_config_data","rank_base_data","rank_reward_data"],"Rifts, trials & dungeons":["digong_config_data","digong_light_data","digong_make_up_missed_monsters_data","digong_reward_data","dungeon_difficult_level_data","dungeon_fog_data","dungeon_time_data","mechanism_data","race_dungeon_config_data","rift_buff_data","rift_level_data","trap_data","trap_event_data"],"Quests & story":["course_data","course_info_data","dialogue_duration_data","dialogue_graph_data","dialogue_graph_skip_data","ecotrace_activity_data","ecotrace_chapter_data","ecotrace_condmaptask_data","ecotrace_quest_data","ecotrace_search_data","guidance_player_template_data","guide_course_data","guide_course_grade_data","guide_course_info_data","guide_data","guide_mode_content_data","guide_mode_data","guide_step_data","guidence_item_data","guidence_sub_item_data","hint_anime_book_data","hint_anime_data","quest_3d_world_data","quest_arrival_tip_data","quest_catalog","quest_chapter","quest_chapter_progress_reward_data","quest_clue_catalog","quest_const","quest_event_data","quest_main","quest_main_revert","quest_main_section_chapter_id","quest_npc_chain_data","quest_npc_observe_data","quest_poi_association_mark_data","quest_recommend_level_data","quest_reward","quest_special_train_revert","quest_task_type","quest_tracking_group_data","quest_tracking_group_revert","school_guide_craft_data","special_train_badge_data","special_train_block_data","special_train_chapter_data","special_train_chapter_quest_revert_data","special_train_chapter_type_quest_revert_data","special_train_condition_chapter_revert_data","special_train_entry_data","special_train_group_chapter_revert_data","special_train_phase_data","special_train_star_title_quest_revert_data","special_train_type_data","story_page_quest_group"],"Photo & studio":["photo_diy_data","photo_filter_data","photo_identify_data","photo_lighting_data","photo_mark_data","photo_official_preset_data","photo_ornament_data","photo_prefab_data","photo_studio_unlock_data","photo_wonderful_replay_data","photography_studio_slot_data"],"Transmog & appearance":["avatar_hair_suit_data","avatar_preset_data","avatar_robot_data","body_shape_effect_config_data","fashion_level_data","fashion_reward_data","info_stamp_animation_config_data","info_stamp_concat_catalog_data","info_stamp_concat_content_data","info_stamp_cost_config_data","info_stamp_custom_bubble_config_data","info_stamp_preset_content_data","info_stamp_unit_config_data","makeup_res_data","pet_transmog_base_data","pet_transmog_default_suit_data","pet_transmog_lock_holes_data","pet_transmog_solt_data","pet_transmog_suit_perview_data","pet_transmog_suits_data","pet_transmog_typeset_data","shopmall_appearance","shopmall_pet_appearance","transmog_effectswitch_data","transmog_state_effect_data"],"Shops & economy":["common_exchange_data","common_money_map","currency_auto_change_data","currency_consume_data","currency_exchange_data","drop_data","drop_group_data","drop_package_data","gacha_base_data","gacha_entry_data","gacha_pool_data","gacha_suit_data","gacha_times_data","item_shop_data","monthcard_bg_data","order_library_data","order_refresh_data","order_shop_desc_data","order_shop_type_data","privilege_data","privilege_type_data","random_shop_data","random_shop_goods_pool_data","random_shop_goods_pool_index_data","random_shop_pos_data","rechage_rebate_gear_data","shop_classify_data","shop_commodity_data","shop_event_data","shop_tag_data","shop_tag_mapping_data","shopmall_commodity_data","shopmall_commodity_tab_data","shopmall_constant_data","shopmall_exchange_shops_data","shopmall_filter_data","shopmall_gift_data","shopmall_recharge_data","shopmall_recommendation_data","shopmall_tab_data","shopmall_tab_group_data","trade_items_data"],"Seasons & events":["daily_reward_data","event_area_activity_data","event_area_task_data","event_ark_carn_data","event_battlepass_data","event_catch_rogue_data","event_common_guide_data","event_common_guide_type_data","event_cond_map_act_data","event_daily_active_data","event_enum_data","event_fracture_research_data","event_global_progress_algorithm_data","event_global_progress_data","event_global_secene_spawner_data","event_growth_gitf_data","event_guide_prebook","event_guide_preheat","event_guide_preheat_type","event_jounery_trial_data","event_leylinetree_guide_data","event_mock_battle_data","event_official_group_data","event_pet_dispacth_data","event_pet_egg_data","event_petsave_ban_data","event_petsave_manual_data","event_petsave_manual_subact_data","event_redbook_spwaners_data","event_season_achievement_data","event_season_introduction_data","event_season_tree_activity_data","event_sign_long_term_data","event_sign_newbie_data","event_sign_version_data","event_social_bind_data","event_task_cond_map_actid_data","event_task_data","event_task_group_map_actid_data","event_task_map_acttype_data","event_task_map_cond_data","event_task_map_data","event_task_map_group_data","event_task_map_group_type_data","event_vitality_pet_animation_data","event_world_racing_data","platform_achievement_rule_data","season_activity_data","season_money_data","season_stage_data","season_stage_timeline_data","time_token_data","time_token_index_data"],"Social & profile":["badge_collection_data","badge_config_data","badge_info_data","badge_task_data","badge_task_revert_data","card_background_data","chat_bubble_data","chat_emoji_data","chat_emoji_tab_data","chat_push_data","chat_quick_send_data","chat_quick_set_data","chat_setting_data","emoji_data","friend_recommend_data","friend_source_data","friendship_enum_data","friendship_level_data","friendship_level_func_data","friendship_level_functype_data","friendship_level_up_data","mail_data","player_badge_condition_data","player_badge_data","player_badge_group_map","player_badge_layout_data","player_badge_main_type_map","player_badge_sub_type_group_map","player_collect_data","player_head_frame_data","player_head_icon_data","player_info_card_btn_data","player_info_card_fun_data","player_level_data","player_random_name_data","player_rank_data","player_skill_data","player_skill_reverse_data","player_skill_tree_data","player_state_data","player_tag_data","player_tag_enum","player_title_data","profile_page_data","show_title_data","social_media_share_data","social_party_data","social_platform_data","social_type_data","team_func_data","team_play_data","title_level_data"],"World simulation":["breakable_grade_data","chem_material_template_data","chemistry_element_data","chemistry_element_field_data","climb_tree_data","ecology_ethnic_interact_behav_data","ecology_ethnic_interact_rule_data","envobj_data","leyline_flower_effect_data","leyline_flower_effect_stage_data","leylineflower_config_data","leylineflower_quality_random_data","leylineflower_status_data","leylineflower_tribute_data","leylinetree_data","leylinetree_extra_effect_data","leylinetree_level_data","leylinetree_pos_data","leylinetree_puppet_data","map_tide_data","material_react_data","meteor_data","meteorology_data","spawner_item_group_data","spawner_model_type_data","spawner_notice_data","spawner_param_data","spawner_visibility_data","spawner_visibility_param_key","tag_reaction_data","tide_config_data","voxel_reaction_data","water_collide_data","waterfall_config_data","weather_data"],"Combat":["buff_calc_value_data","buff_config_data","buff_series_to_extra_random_buff","chain_attack_damage_data","combat_damage_number_data","combat_threat_level_data","element_against_data","element_buff_data","element_buff_rev_data","element_name_to_id","element_prop_data","extra_random_buff","extra_random_buff_condition","hit_frame_freeze_data","hit_model_shake_data","hitbox_data","impulse_data","qte_clip_data","qte_group_data","qte_phase_effect_data","qte_timeline_data","real_element_against","skill_hit_displacement_data","skill_setting_relation_set_data","skill_tag_data","weapon_data"],"Minigames":["decibel_grade_data","piano_music_data","piano_selection_data","piano_timbre_data","puzzle_data","quiz_bank_config_data","quiz_bank_config_revert_data","quiz_multi_config_data","quiz_one_config_data","totem_upgrade_data","world_racing_track_data"],"Vehicles":["vehicle_data","vehicle_seat_attach_data","vehicle_seat_data","vehicle_seat_skill_data"]};
-(function(){
-  const g = document.getElementById('sysgrid');
-  if(!g) return;
-  const order = Object.keys(SYS).sort((a,b) => SYS[b].length - SYS[a].length);
-  for(const k of order){
-    const t = SYS[k];
-    const d = document.createElement('div');
-    d.className = 'sy';
-    d.innerHTML = '<h5>' + k + '<em>' + t.length + '</em></h5>'
-                + '<p>' + t.slice(0, 14).join(' \u00b7 ') + (t.length > 14 ? ' \u2026' : '') + '</p>';
-    g.appendChild(d);
-  }
-})();
-
-/* ---- solved roster ---- */
-const SOLVED = {"ids":{"10011":"Celestis","10012":"Stellarys","10021":"Helmut","10022":"Helmwhelp","10023":"Helgon","10024":"Jawling","10025":"Infergon","10026":"Pawney","10027":"Rookey","10031":"Wisptis","10032":"Ignitis","10033":"Fulmintis","10041":"Skippy","10042":"Pranky","10043":"Glacy","10045":"Leafy","10051":"Emberpup","10052":"Flameruff","10053":"Scorchhowl","10055":"Inferlupa","10122":"Besauce","10131":"Bonesky","10132":"Fenrier","10133":"Glynsera","10141":"Bulbly","10142":"Veilfloat","10143":"Luminelle","10161":"Budclaw","10162":"Shrubclaw","10163":"Geoclaw","10171":"Susuta","10172":"Popota","10173":"Piopiota","10174":"Panpanta","10181":"Chirpi","10184":"Tromber","10185":"Cornet","10187":"Tubster","10191":"Shelly","10192":"Sheldon","10194":"Sherro","10201":"Hummin","10203":"Hexxin","10207":"Tuckin","10211":"Iris","10212":"Irisal","10213":"Irisalis","10221":"Bolty","10222":"Blazen","10231":"Flutternym","10232":"Gracewing","10233":"Somniwing","10261":"Nimbi","10262":"Turbo","10263":"Dreaple","10281":"Pebbling","10282":"Lavazar","10283":"Magmarex","10284":"Geodeback","10285":"Minespine","10291":"Fentuft","10293":"Fenmane","10321":"Budsquire","10323":"Thornblade","10324":"Melloblum","10331":"Sparki","10333":"Flamerion","10351":"Dewy","10352":"Fragrancier","10361":"Helion","10363":"Soleon","10371":"Lunara","10373":"Fennelun","10381":"Reefish","10383":"Coraliz","10421":"Malangel","10423":"Malevsera","10431":"Cozite","10433":"Bailite","10443":"Eklue","10451":"Baleetle","10453":"Waleetle","10454":"Bouldus","10471":"Pomegg","10474":"Dazmand","10475":"Pomawk","10481":"Fahloo","10483":"Erlath","10501":"Cubbo","10503":"Grizbo","10511":"Squarrel","10512":"Squashel","10583":"Glameep"},"fam":{"1001":[["10011","Celestis"],["10012","Stellarys"]],"1002":[["10021","Helmut"],["10022","Helmwhelp"],["10023","Helgon"],["10024","Jawling"],["10025","Infergon"],["10026","Pawney"],["10027","Rookey"]],"1003":[["10031","Wisptis"],["10032","Ignitis"],["10033","Fulmintis"]],"1004":[["10041","Skippy"],["10042","Pranky"],["10043","Glacy"],["10045","Leafy"]],"1005":[["10051","Emberpup"],["10052","Flameruff"],["10053","Scorchhowl"],["10055","Inferlupa"]],"1012":[["10122","Besauce"]],"1013":[["10131","Bonesky"],["10132","Fenrier"],["10133","Glynsera"]],"1014":[["10141","Bulbly"],["10142","Veilfloat"],["10143","Luminelle"]],"1016":[["10161","Budclaw"],["10162","Shrubclaw"],["10163","Geoclaw"]],"1017":[["10171","Susuta"],["10172","Popota"],["10173","Piopiota"],["10174","Panpanta"]],"1018":[["10181","Chirpi"],["10184","Tromber"],["10185","Cornet"],["10187","Tubster"]],"1019":[["10191","Shelly"],["10192","Sheldon"],["10194","Sherro"]],"1020":[["10201","Hummin"],["10203","Hexxin"],["10207","Tuckin"]],"1021":[["10211","Iris"],["10212","Irisal"],["10213","Irisalis"]],"1022":[["10221","Bolty"],["10222","Blazen"]],"1023":[["10231","Flutternym"],["10232","Gracewing"],["10233","Somniwing"]],"1026":[["10261","Nimbi"],["10262","Turbo"],["10263","Dreaple"]],"1028":[["10281","Pebbling"],["10282","Lavazar"],["10283","Magmarex"],["10284","Geodeback"],["10285","Minespine"]],"1029":[["10291","Fentuft"],["10293","Fenmane"]],"1032":[["10321","Budsquire"],["10323","Thornblade"],["10324","Melloblum"]],"1033":[["10331","Sparki"],["10333","Flamerion"]],"1035":[["10351","Dewy"],["10352","Fragrancier"]],"1036":[["10361","Helion"],["10363","Soleon"]],"1037":[["10371","Lunara"],["10373","Fennelun"]],"1038":[["10381","Reefish"],["10383","Coraliz"]],"1042":[["10421","Malangel"],["10423","Malevsera"]],"1043":[["10431","Cozite"],["10433","Bailite"]],"1044":[["10443","Eklue"]],"1045":[["10451","Baleetle"],["10453","Waleetle"],["10454","Bouldus"]],"1047":[["10471","Pomegg"],["10474","Dazmand"],["10475","Pomawk"]],"1048":[["10481","Fahloo"],["10483","Erlath"]],"1050":[["10501","Cubbo"],["10503","Grizbo"]],"1051":[["10511","Squarrel"],["10512","Squashel"]],"1058":[["10583","Glameep"]]},"codes":{"1001":"Starly","1003":"Mantis","1004":"WaterDragon","1005":"FireWolf","1011":"Tarani","1013":"IceWolf","1014":"Jellyfish","1016":"Crab","1017":"Otter","1018":"Seagull","1019":"ShellStar","1020":"SingGrass","1021":"Iris","1022":"ElectricMarten","1023":"DreamButterfly","1026":"CloudSheep","1028":"Godzilla","1029":"ElfDog","1032":"Rose","1033":"Flame","1035":"HoneyBird","1036":"BornLion","1037":"BornFox","1038":"CoralFish","1042":"SeaAngel","1043":"WhiteAntNest","1045":"DungBeetle","1047":"CheerEgg","1048":"Flamingo","1050":"SleepyBear","1051":"Fistail","1058":"SheepHeal"}};
-(function(){
-  const w = document.getElementById('solved');
-  for(const f of Object.keys(SOLVED.fam)){
-    const c = SOLVED.codes[f];
-    const d = document.createElement('div');
-    d.className = 'sf';
-    d.innerHTML = '<h5>' + f + 'x' + (c ? '<i>' + c + '</i>' : '') + '</h5><ul>'
-      + SOLVED.fam[f].map(p => '<li><code>' + p[0] + '</code><b>' + p[1] + '</b></li>').join('')
-      + '</ul>';
-    w.appendChild(d);
-  }
-})();
-
-/* ---- codenames ---- */
-const CODES = {"pairs":{"10022":"Helgon","10023":"Helgon","10024":"Helgon","10025":"Infergon","10122":"Besauce","10211":"Iris","10212":"Irisal","10213":"Irisalis","10222":"Blazen","10241":"Morphling"},"lines":{"1001":{"code":"Starly","ids":["10011","10012"]},"1003":{"code":"Mantis","ids":["10031","10032","10033"]},"1004":{"code":"WaterDragon","ids":["10041","10042","10043","10045"]},"1005":{"code":"FireWolf","ids":["10051","10052","10053","10055"]},"1011":{"code":"Tarani","ids":["10113","10114"]},"1013":{"code":"IceWolf","ids":["10131","10132","10133"]},"1014":{"code":"Jellyfish","ids":["10141","10142","10143"]},"1016":{"code":"Crab","ids":["10161","10162","10163"]},"1017":{"code":"Otter","ids":["10171","10172","10173","10174"]},"1018":{"code":"Seagull","ids":["10181","10184","10185","10187"]},"1019":{"code":"ShellStar","ids":["10191","10192","10194"]},"1020":{"code":"SingGrass","ids":["10201","10203","10207"]},"1021":{"code":"Iris","ids":["10211","10212","10213"]},"1022":{"code":"ElectricMarten","ids":["10221","10222"]},"1023":{"code":"DreamButterfly","ids":["10231","10232","10233"]},"1026":{"code":"CloudSheep","ids":["10261","10262","10263"]},"1028":{"code":"Godzilla","ids":["10281","10282","10283","10284","10285"]},"1029":{"code":"ElfDog","ids":["10291","10293"]},"1032":{"code":"Rose","ids":["10321","10323","10324"]},"1033":{"code":"Flame","ids":["10331","10333"]},"1035":{"code":"HoneyBird","ids":["10351","10352"]},"1036":{"code":"BornLion","ids":["10361","10363"]},"1037":{"code":"BornFox","ids":["10371","10373"]},"1038":{"code":"CoralFish","ids":["10381","10383"]},"1042":{"code":"SeaAngel","ids":["10421","10423"]},"1043":{"code":"WhiteAntNest","ids":["10431","10433"]},"1045":{"code":"DungBeetle","ids":["10451","10453","10454"]},"1047":{"code":"CheerEgg","ids":["10471","10474","10475"]},"1048":{"code":"Flamingo","ids":["10481","10483"]},"1050":{"code":"SleepyBear","ids":["10501","10503"]},"1051":{"code":"Fistail","ids":["10511","10512"]},"1058":{"code":"SheepHeal","ids":["10581","10583"]}},"traits":{"10021":["Helm","Helmonbox","Mimicry"],"10022":["Helgon"],"10023":["Helgon","Tornado","Scar"],"10024":["Helgon"],"10025":["Helgon","Infergon"],"10026":["Helm","Riding"],"10027":["Helm","Harden","DefMode"],"10031":["GhostFlame"],"10032":["Fury"],"10041":["Bald"],"10043":["CoffeeShop"],"10045":["Lotus"],"10051":["Fireball"],"10053":["FlyStrike"],"10055":["GhostWolfHead"],"10072":["ChargeFur"],"10122":["Besauce"],"10133":["BladeLight"],"10143":["HaloMax"],"10161":["Exuberance"],"10163":["RotateSlash"],"10171":["Sphere"],"10172":["Bubbles"],"10173":["Surf"],"10174":["Dramotter","Bolang"],"10181":["Stone"],"10187":["StormRazor"],"10191":["Mimicry"],"10194":["GreatSword","Lita"],"10201":["BigFlower","Garland"],"10211":["FlowerWither","Phantom"],"10212":["Petal"],"10213":["Irelia","FenShen"],"10221":["Frizz","Sparks"],"10222":["Blazen","Ghost"],"10231":["EnergyBody"],"10233":["Velouria"],"10241":["Morphling","Deceived","Transform"],"10261":["Inflate","Glasses"],"10262":["GoldenSheep"],"10263":["CloudStrip"],"10283":["Rock"],"10285":["Crystal"],"10311":["SeaHorse","Lila"],"10321":["NewHat","Yezi"],"10323":["Knight","Sword"],"10333":["Firering"],"10361":["Spark","SpeedBurst"],"10363":["HighJump"],"10371":["Claw"],"10383":["Spine"],"10403":["Shrimp","Keng"],"10431":["JumpSpray"],"10433":["SmokeGrenade"],"10443":["Sonar"],"10451":["Qiang","Zhen"],"10463":["Walrus","Sculpture"],"10481":["Bubble"],"10501":["Rampage"],"10503":["Rampage"],"10512":["DarkShiny"],"10581":["Yezi"],"10594":["Blobfish"],"10613":["BumbleBee"],"10623":["GachaOctopus"],"10651":["WaterDrop"],"69993":["DouyinSpirit"],"90207":["BigBranch","SmallBranch"]}};
-(function(){
-  const p = document.getElementById('pairs');
-  for(const id of Object.keys(CODES.pairs).sort()){
-    const d = document.createElement('div');
-    d.className = 'pr';
-    d.innerHTML = '<code>' + id + '</code><b>' + CODES.pairs[id] + '</b>';
-    p.appendChild(d);
-  }
-  const c = document.getElementById('codes');
-  for(const f of Object.keys(CODES.lines).sort()){
-    const L = CODES.lines[f];
-    const d = document.createElement('div');
-    d.className = 'cd';
-    d.innerHTML = '<b>' + L.code + '</b><em>' + f + 'x</em>'
-                + '<span>' + L.ids.join(' · ') + '</span>';
-    c.appendChild(d);
-  }
-})();
-
-/* ---- named roster ---- */
-const NAMES_DATA = {"roster":{"Baleetle":["Alpha","Resting","Umbral","Egg","Family"],"Besauce":["Alpha","Umbral"],"Blazen":["Alpha","Prismana","Umbral"],"Bolty":["Alpha","Family","Relic"],"Bonesky":["Alpha","Research"],"Bouldus":["Alpha","Relic"],"Budclaw":["Alpha","Spirit","Umbral","Family"],"Budsquire":["Alpha","Enlarged","Umbral","Family"],"Bulbly":["Alpha","Spirit","Umbral","Family"],"Celestis":["Alpha","Spirit","Umbral","Family","Research"],"Chirpi":["Alpha","Spirit","Umbral","Family"],"Cornet":["Prismana","Umbral"],"Cubbo":["Umbral","Family"],"Dewy":["Alpha","Umbral","Family"],"Emberpup":["Alpha","Enlarged","Spirit","Umbral","Family"],"Fenrier":["Alpha","Umbral"],"Fentuft":["Alpha","Family"],"Flamerion":["Alpha","Mighty","Umbral"],"Flameruff":["Alpha","Mighty","Patrolling","Umbral","Quests"],"Flutternym":["Alpha","Family"],"Fragrancier":["Alpha","Umbral"],"Geoclaw":["Alpha","Voxelic","Relic"],"Geodeback":["Alpha","Umbral"],"Glacy":["Alpha","Cloaked","Mutant","Prismana","Umbral"],"Glameep":["Alpha","Omega","Relic"],"Glynsera":["Alpha","Relic"],"Gracewing":["Alpha","Umbral"],"Grizbo":["Alpha","Prismana","Umbral","Relic"],"Helgon":["Alpha","Elite"],"Helmut":["Alpha","Umbral","Family"],"Helmwhelp":["Alpha","Patrolling","Spirit"],"Hexxin":["Alpha","Umbral"],"Hummin":["Alpha","Umbral","Family"],"Ignitis":["Alpha","Mighty","Prismana","Umbral","Relic"],"Infergon":["Omega","Relic"],"Iris":["Alpha","Spirit","Umbral","Egg","Family"],"Irisal":["Alpha","Umbral","Relic"],"Jawling":["Alpha","Family"],"Lavazar":["Alpha","Omega","Resting"],"Leafy":["Alpha","Umbral","Relic"],"Luminelle":["Alpha","Prismana","Umbral","Relic"],"Magmarex":["Alpha","Mighty","Omega","Prismana","Resting","Umbral","Relic"],"Melloblum":["Alpha","Umbral"],"Minespine":["Alpha","Umbral","Relic"],"Nimbi":["Alpha","Elite","Spirit","Umbral","Family","Relic"],"Panpanta":["Alpha","Prismana","Umbral","Voxelic","Relic"],"Pawney":["Alpha","Prismana","Spirit","Umbral"],"Pebbling":["Alpha","Resting","Umbral","Family"],"Piopiota":["Alpha","Umbral"],"Pomegg":["Alpha","Family"],"Popota":["Alpha","Spirit","Umbral"],"Pranky":["Alpha","Umbral"],"Rookey":["Alpha","Umbral","Relic"],"Scorchhowl":["Alpha","Enlarged","Mighty","Prismana","Umbral","Relic"],"Shelly":["Alpha","Umbral","Family"],"Sherro":["Alpha","Omega","Umbral","Relic"],"Shrubclaw":["Alpha","Umbral"],"Skippy":["Alpha","Spirit","Umbral","Family"],"Somniwing":["Alpha","Egg"],"Sparkelf":["Alpha","Family"],"Sparki":["Alpha","Umbral","Family"],"Squarrel":["Alpha","Family"],"Stellarys":["Alpha","Cloaked","Elite","Mighty","Prismana","Umbral","Voxelic","Relic"],"Susuta":["Alpha","Umbral","Egg","Family"],"Thornblade":["Alpha","Patrolling","Prismana","Umbral"],"Tromber":["Alpha","Umbral","Research"],"Tubster":["Alpha","Umbral","Relic"],"Tuckin":["Alpha","Omega","Umbral","Relic"],"Turbo":["Alpha","Elite","Enlarged","Prismana","Umbral"],"Veilfloat":["Alpha","Umbral"],"Wisptis":["Alpha","Umbral","Family"]},"families":["Baleetle","Bolty","Budclaw","Budsquire","Bulbly","Celestis","Chirpi","Cozite","Cubbo","Dewy","Emberpup","Fahloo","Fentuft","Flutternym","Helmut","Hummin","Iris","Jawling","Nimbi","Pebbling","Pomegg","Shelly","Skippy","Sparkelf","Sparki","Squarrel","Susuta","Wisptis"],"lines":{"Helmut":["Helmut","Helmwhelp","Helion","Helgon","Hellsoul"],"Fentuft":["Fentuft","Fenmane","Fenrier"],"Iris":["Iris","Irisal","Irisalis"],"Baleetle":["Baleetle","Waleetle"],"Pomegg":["Pomegg","Pomawk"],"Sparkelf":["Sparkelf","Sparki"],"Budclaw":["Budclaw","Budsquire"],"Geoclaw":["Geoclaw","Geodeback"],"Flamerion":["Flamerion","Flameruff"],"Popota":["Popota","Popapus"],"Shelly":["Shelly","Sherro"],"Glacy":["Glacy","Glameep"]}};
-const KEYFORM = new Set(["Alpha","Umbral","Prismana","Omega","Mighty","Elite","Cloaked","Mutant","Voxelic"]);
-(function(){
-  const r = document.getElementById('roster');
-  for(const n of Object.keys(NAMES_DATA.roster).sort()){
-    const d = document.createElement('div');
-    d.className = 'cr';
-    d.innerHTML = '<b>' + n + '</b>' + NAMES_DATA.roster[n]
-      .map(t => '<span class="' + (KEYFORM.has(t) ? 'k' : '') + '">' + t + '</span>').join('');
-    r.appendChild(d);
-  }
-  const f = document.getElementById('fams');
-  for(const n of NAMES_DATA.families.slice().sort()){
-    const i = document.createElement('i'); i.textContent = n; f.appendChild(i);
-  }
-  const l = document.getElementById('lines');
-  for(const k of Object.keys(NAMES_DATA.lines).sort()){
-    const d = document.createElement('div');
-    d.className = 'ln';
-    d.innerHTML = '<b>' + k + ' line</b><br><em>' + NAMES_DATA.lines[k].join(' → ') + '</em>';
-    l.appendChild(d);
-  }
-})();
-
-/* ---- artwork tree ---- */
 const TREE = {"1001":{"10011":[{"f":"10011","v":null,"t":null}],"10012":[{"f":"10012","v":null,"t":null},{"f":"1001201","v":"01","t":null},{"f":"1001202","v":"02","t":null},{"f":"1001203","v":"03","t":null}],"10013":[{"f":"10013","v":null,"t":null}]},"1002":{"10021":[{"f":"10021","v":null,"t":null},{"f":"1002101","v":"01","t":null},{"f":"1002102","v":"02","t":null}],"10022":[{"f":"10022","v":null,"t":null},{"f":"1002201","v":"01","t":null}],"10023":[{"f":"10023","v":null,"t":null},{"f":"1002301","v":"01","t":null}],"10024":[{"f":"10024","v":null,"t":null},{"f":"1002401","v":"01","t":null}],"10025":[{"f":"10025","v":null,"t":null},{"f":"1002503","v":"03","t":null}],"10026":[{"f":"10026","v":null,"t":null},{"f":"1002601","v":"01","t":null},{"f":"1002602","v":"02","t":null},{"f":"1002603","v":"03","t":null},{"f":"1002604","v":"04","t":null}],"10027":[{"f":"10027","v":null,"t":null},{"f":"1002701","v":"01","t":null},{"f":"1002702","v":"02","t":null}]},"1003":{"10031":[{"f":"10031","v":null,"t":null},{"f":"1003101","v":"01","t":null},{"f":"1003103","v":"03","t":null}],"10032":[{"f":"10032","v":null,"t":null},{"f":"1003201","v":"01","t":null},{"f":"1003202","v":"02","t":null},{"f":"1003203","v":"03","t":null},{"f":"1003204","v":"04","t":null}],"10033":[{"f":"10033","v":null,"t":null},{"f":"1003305","v":"05","t":null}]},"1004":{"10041":[{"f":"10041","v":null,"t":null},{"f":"1004101","v":"01","t":null},{"f":"1004102","v":"02","t":null}],"10042":[{"f":"10042","v":null,"t":null},{"f":"1004201","v":"01","t":null},{"f":"1004202","v":"02","t":null}],"10043":[{"f":"10043","v":null,"t":null},{"f":"1004301","v":"01","t":null},{"f":"1004302","v":"02","t":null},{"f":"1004303","v":"03","t":null}],"10045":[{"f":"10045","v":null,"t":null}]},"1005":{"10051":[{"f":"10051","v":null,"t":null},{"f":"10051_Shadow","v":null,"t":"Shadow"},{"f":"1005101","v":"01","t":null},{"f":"1005104","v":"04","t":null}],"10052":[{"f":"10052","v":null,"t":null},{"f":"1005201","v":"01","t":null},{"f":"1005204","v":"04","t":null}],"10053":[{"f":"10053","v":null,"t":null},{"f":"1005301","v":"01","t":null},{"f":"1005302","v":"02","t":null},{"f":"1005303","v":"03","t":null},{"f":"1005304","v":"04","t":null},{"f":"1005305","v":"05","t":null}],"10055":[{"f":"10055","v":null,"t":null},{"f":"1005503","v":"03","t":null}]},"1007":{"10071":[{"f":"10071","v":null,"t":null}],"10072":[{"f":"10072","v":null,"t":null}]},"1008":{"10081":[{"f":"10081","v":null,"t":null}],"10083":[{"f":"10083","v":null,"t":null}]},"1012":{"10122":[{"f":"10122","v":null,"t":null}]},"1013":{"10131":[{"f":"10131","v":null,"t":null},{"f":"1013102","v":"02","t":null}],"10132":[{"f":"10132","v":null,"t":null},{"f":"1013202","v":"02","t":null}],"10133":[{"f":"10133","v":null,"t":null},{"f":"1013301","v":"01","t":null},{"f":"1013302","v":"02","t":null}]},"1014":{"10141":[{"f":"10141","v":null,"t":null}],"10142":[{"f":"10142","v":null,"t":null}],"10143":[{"f":"10143","v":null,"t":null},{"f":"1014301","v":"01","t":null},{"f":"1014302","v":"02","t":null},{"f":"1014303","v":"03","t":null}],"10144":[{"f":"10144","v":null,"t":null}]},"1015":{"10151":[{"f":"10151","v":null,"t":null}]},"1016":{"10161":[{"f":"10161","v":null,"t":null},{"f":"10161_Male","v":null,"t":"Male"},{"f":"10161female","v":null,"t":"female"},{"f":"10161male","v":null,"t":"male"},{"f":"1016101","v":"01","t":null},{"f":"1016101_Female","v":"01","t":"Female"},{"f":"1016101_Male","v":"01","t":"Male"},{"f":"1016102","v":"02","t":null},{"f":"1016103","v":"03","t":null},{"f":"1016103_Female","v":"03","t":"Female"},{"f":"1016103_Male","v":"03","t":"Male"}],"10162":[{"f":"10162","v":null,"t":null},{"f":"1016201","v":"01","t":null},{"f":"1016201_Female","v":"01","t":"Female"},{"f":"1016201_Male","v":"01","t":"Male"},{"f":"1016202","v":"02","t":null},{"f":"1016203","v":"03","t":null}],"10163":[{"f":"10163","v":null,"t":null}]},"1017":{"10171":[{"f":"10171","v":null,"t":null},{"f":"1017101","v":"01","t":null}],"10172":[{"f":"10172","v":null,"t":null},{"f":"1017201","v":"01","t":null}],"10173":[{"f":"10173","v":null,"t":null},{"f":"1017301","v":"01","t":null}],"10174":[{"f":"10174","v":null,"t":null},{"f":"1017401","v":"01","t":null},{"f":"1017402","v":"02","t":null}]},"1018":{"10181":[{"f":"10181","v":null,"t":null},{"f":"1018101","v":"01","t":null},{"f":"1018103","v":"03","t":null}],"10184":[{"f":"10184","v":null,"t":null},{"f":"1018401","v":"01","t":null},{"f":"1018403","v":"03","t":null}],"10185":[{"f":"10185","v":null,"t":null},{"f":"1018501","v":"01","t":null},{"f":"1018502","v":"02","t":null},{"f":"1018503","v":"03","t":null},{"f":"1018504","v":"04","t":null}],"10187":[{"f":"10187","v":null,"t":null},{"f":"1018701","v":"01","t":null},{"f":"1018703","v":"03","t":null}]},"1019":{"10191":[{"f":"10191","v":null,"t":null}],"10192":[{"f":"10192","v":null,"t":null}],"10193":[{"f":"10193","v":null,"t":null}],"10194":[{"f":"10194","v":null,"t":null},{"f":"1019401","v":"01","t":null},{"f":"1019402","v":"02","t":null},{"f":"1019405","v":"05","t":null}],"10195":[{"f":"10195","v":null,"t":null}]},"1020":{"10201":[{"f":"10201","v":null,"t":null},{"f":"1020101","v":"01","t":null}],"10203":[{"f":"10203","v":null,"t":null},{"f":"1020301","v":"01","t":null},{"f":"1020302","v":"02","t":null},{"f":"1020304","v":"04","t":null}],"10207":[{"f":"10207","v":null,"t":null},{"f":"1020701","v":"01","t":null}]},"1021":{"10211":[{"f":"10211","v":null,"t":null},{"f":"1021101","v":"01","t":null},{"f":"1021102","v":"02","t":null},{"f":"1021103","v":"03","t":null},{"f":"1021104","v":"04","t":null},{"f":"1021105","v":"05","t":null},{"f":"1021106","v":"06","t":null}],"10212":[{"f":"10212","v":null,"t":null},{"f":"1021201","v":"01","t":null},{"f":"1021202","v":"02","t":null},{"f":"1021203","v":"03","t":null},{"f":"1021204","v":"04","t":null},{"f":"1021205","v":"05","t":null},{"f":"1021206","v":"06","t":null}],"10213":[{"f":"10213","v":null,"t":null}]},"1022":{"10221":[{"f":"10221","v":null,"t":null},{"f":"1022102","v":"02","t":null}],"10222":[{"f":"10222","v":null,"t":null},{"f":"1022201","v":"01","t":null},{"f":"1022202","v":"02","t":null},{"f":"1022203","v":"03","t":null}],"10223":[{"f":"10223","v":null,"t":null}]},"1023":{"10231":[{"f":"10231","v":null,"t":null},{"f":"1023101","v":"01","t":null},{"f":"1023102","v":"02","t":null},{"f":"1023103","v":"03","t":null}],"10232":[{"f":"10232","v":null,"t":null},{"f":"1023201","v":"01","t":null},{"f":"1023202","v":"02","t":null},{"f":"1023203","v":"03","t":null}],"10233":[{"f":"10233","v":null,"t":null}]},"1024":{"10241":[{"f":"10241","v":null,"t":null}]},"1026":{"10261":[{"f":"10261","v":null,"t":null},{"f":"1026101","v":"01","t":null},{"f":"1026102","v":"02","t":null},{"f":"1026105","v":"05","t":null}],"10262":[{"f":"10262","v":null,"t":null},{"f":"1026201","v":"01","t":null},{"f":"1026202","v":"02","t":null},{"f":"1026204","v":"04","t":null},{"f":"1026205","v":"05","t":null},{"f":"1026206","v":"06","t":null}],"10263":[{"f":"10263","v":null,"t":null}]},"1028":{"10281":[{"f":"10281","v":null,"t":null}],"10282":[{"f":"10282","v":null,"t":null}],"10283":[{"f":"10283","v":null,"t":null},{"f":"1028301","v":"01","t":null},{"f":"1028303","v":"03","t":null}],"10284":[{"f":"10284","v":null,"t":null}],"10285":[{"f":"10285","v":null,"t":null}]},"1029":{"10291":[{"f":"10291","v":null,"t":null}],"10293":[{"f":"10293","v":null,"t":null},{"f":"1029301","v":"01","t":null}]},"1032":{"10321":[{"f":"10321","v":null,"t":null},{"f":"1032103","v":"03","t":null}],"10323":[{"f":"10323","v":null,"t":null},{"f":"1032301","v":"01","t":null},{"f":"1032302","v":"02","t":null},{"f":"1032303","v":"03","t":null},{"f":"1032304","v":"04","t":null}],"10324":[{"f":"10324","v":null,"t":null},{"f":"1032402","v":"02","t":null}]},"1033":{"10331":[{"f":"10331","v":null,"t":null},{"f":"1033101","v":"01","t":null},{"f":"1033102","v":"02","t":null},{"f":"1033103","v":"03","t":null}],"10333":[{"f":"10333","v":null,"t":null},{"f":"1033301","v":"01","t":null},{"f":"1033302","v":"02","t":null},{"f":"1033303","v":"03","t":null}]},"1035":{"10351":[{"f":"10351","v":null,"t":null}],"10352":[{"f":"10352","v":null,"t":null}]},"1036":{"10361":[{"f":"10361","v":null,"t":null}],"10363":[{"f":"10363","v":null,"t":null}]},"1037":{"10371":[{"f":"10371","v":null,"t":null}],"10373":[{"f":"10373","v":null,"t":null}]},"1038":{"10381":[{"f":"10381","v":null,"t":null},{"f":"1038101","v":"01","t":null},{"f":"1038102","v":"02","t":null},{"f":"1038103","v":"03","t":null}],"10383":[{"f":"10383","v":null,"t":null},{"f":"1038301","v":"01","t":null},{"f":"1038303","v":"03","t":null}]},"1039":{"10391":[{"f":"10391","v":null,"t":null}],"10393":[{"f":"10393","v":null,"t":null}]},"1040":{"10401":[{"f":"10401","v":null,"t":null},{"f":"1040101","v":"01","t":null}],"10403":[{"f":"10403","v":null,"t":null},{"f":"1040301","v":"01","t":null}]},"1042":{"10421":[{"f":"10421","v":null,"t":null},{"f":"1042101","v":"01","t":null}],"10423":[{"f":"10423","v":null,"t":null},{"f":"1042301","v":"01","t":null}]},"1043":{"10431":[{"f":"10431","v":null,"t":null}],"10433":[{"f":"10433","v":null,"t":null}],"10434":[{"f":"10434","v":null,"t":null}]},"1044":{"10441":[{"f":"10441","v":null,"t":null},{"f":"1044101","v":"01","t":null},{"f":"1044102","v":"02","t":null}],"10443":[{"f":"10443","v":null,"t":null},{"f":"1044301","v":"01","t":null},{"f":"1044302","v":"02","t":null}],"10444":[{"f":"10444","v":null,"t":null}]},"1045":{"10451":[{"f":"10451","v":null,"t":null},{"f":"1045101","v":"01","t":null}],"10453":[{"f":"10453","v":null,"t":null},{"f":"1045301","v":"01","t":null},{"f":"1045302","v":"02","t":null}],"10454":[{"f":"10454","v":null,"t":null},{"f":"1045401","v":"01","t":null}]},"1046":{"10461":[{"f":"10461","v":null,"t":null},{"f":"1046101","v":"01","t":null}],"10463":[{"f":"10463","v":null,"t":null}],"10464":[{"f":"10464","v":null,"t":null}]},"1047":{"10471":[{"f":"10471","v":null,"t":null},{"f":"1047101","v":"01","t":null},{"f":"1047102","v":"02","t":null},{"f":"1047103","v":"03","t":null}],"10474":[{"f":"10474","v":null,"t":null},{"f":"1047401","v":"01","t":null}],"10475":[{"f":"10475","v":null,"t":null},{"f":"1047501","v":"01","t":null},{"f":"1047502","v":"02","t":null},{"f":"1047503","v":"03","t":null}]},"1048":{"10481":[{"f":"10481","v":null,"t":null}],"10483":[{"f":"10483","v":null,"t":null}]},"1049":{"10491":[{"f":"10491","v":null,"t":null}],"10493":[{"f":"10493","v":null,"t":null}]},"1050":{"10501":[{"f":"10501","v":null,"t":null}],"10503":[{"f":"10503","v":null,"t":null},{"f":"1050301","v":"01","t":null}]},"1051":{"10511":[{"f":"10511","v":null,"t":null},{"f":"1051101","v":"01","t":null},{"f":"1051102","v":"02","t":null}],"10512":[{"f":"10512","v":null,"t":null}],"10513":[{"f":"10513","v":null,"t":null},{"f":"1051301","v":"01","t":null},{"f":"1051302","v":"02","t":null}]},"1054":{"10541":[{"f":"10541","v":null,"t":null},{"f":"1054101","v":"01","t":null}],"10543":[{"f":"10543","v":null,"t":null},{"f":"1054301","v":"01","t":null}]},"1056":{"10561":[{"f":"10561","v":null,"t":null}],"10563":[{"f":"10563","v":null,"t":null}],"10564":[{"f":"10564","v":null,"t":null}]},"1058":{"10581":[{"f":"10581","v":null,"t":null}],"10583":[{"f":"10583","v":null,"t":null},{"f":"1058301","v":"01","t":null}]},"1059":{"10591":[{"f":"10591","v":null,"t":null},{"f":"1059101","v":"01","t":null}],"10593":[{"f":"10593","v":null,"t":null},{"f":"1059301","v":"01","t":null},{"f":"1059302","v":"02","t":null}],"10594":[{"f":"10594","v":null,"t":null}]},"1060":{"10601":[{"f":"10601","v":null,"t":null}],"10603":[{"f":"10603","v":null,"t":null}],"10604":[{"f":"10604","v":null,"t":null}]},"1061":{"10611":[{"f":"10611","v":null,"t":null},{"f":"1061101","v":"01","t":null}],"10613":[{"f":"10613","v":null,"t":null}],"10614":[{"f":"10614","v":null,"t":null}]},"1062":{"10621":[{"f":"10621","v":null,"t":null},{"f":"1062101","v":"01","t":null}],"10623":[{"f":"10623","v":null,"t":null},{"f":"1062301","v":"01","t":null}]},"1065":{"10651":[{"f":"10651","v":null,"t":null}]},"2021":{"20211":[{"f":"2021102","v":"02","t":null}],"20212":[{"f":"2021203","v":"03","t":null}]},"6999":{"69993":[{"f":"69993","v":null,"t":null},{"f":"6999301","v":"01","t":null}]},"9020":{"90207":[{"f":"90207","v":null,"t":null}]}};
-
-/* Pre-filled from the solved roster; edit any field to override */
-const NAMES = Object.assign({}, (typeof SOLVED !== 'undefined' ? SOLVED.ids : {}));
+const CLS  = {"10000":"ref","10011":"rig","10012":"rig","10013":"art","10021":"rig","10022":"rig","10023":"rig","10024":"rig","10025":"rig","10026":"rig","10027":"rig","10031":"rig","10032":"rig","10033":"rig","10041":"rig","10042":"rig","10043":"rig","10045":"rig","10051":"rig","10052":"rig","10053":"rig","10055":"rig","10071":"art","10072":"art","10081":"art","10082":"ref","10083":"art","10101":"ref","10113":"ref","10114":"ref","10122":"rig","10131":"rig","10132":"rig","10133":"rig","10141":"rig","10142":"rig","10143":"rig","10144":"rig","10151":"art","10152":"ref","10153":"ref","10161":"rig","10162":"rig","10163":"rig","10171":"rig","10172":"rig","10173":"rig","10174":"rig","10181":"rig","10183":"ref","10184":"rig","10185":"rig","10187":"rig","10191":"rig","10192":"rig","10193":"art","10194":"rig","10195":"art","10201":"rig","10203":"rig","10207":"rig","10211":"rig","10212":"rig","10213":"rig","10221":"rig","10222":"rig","10223":"art","10231":"rig","10232":"rig","10233":"rig","10241":"rig","10261":"rig","10262":"rig","10263":"rig","10281":"rig","10282":"rig","10283":"rig","10284":"rig","10285":"rig","10291":"rig","10293":"rig","10311":"rig","10313":"ref","10314":"ref","10321":"rig","10323":"rig","10324":"rig","10331":"rig","10333":"rig","10351":"rig","10352":"rig","10361":"rig","10363":"rig","10371":"rig","10373":"rig","10381":"tex","10383":"tex","10391":"art","10393":"art","10401":"art","10403":"rig","10421":"tex","10423":"rig","10431":"rig","10433":"rig","10434":"tex","10441":"rig","10443":"rig","10444":"art","10451":"rig","10453":"rig","10454":"rig","10461":"tex","10463":"tex","10464":"tex","10471":"rig","10474":"rig","10475":"rig","10481":"rig","10483":"rig","10491":"art","10493":"art","10501":"rig","10503":"rig","10511":"rig","10512":"rig","10513":"art","10541":"art","10543":"art","10544":"ref","10561":"art","10563":"art","10564":"art","10565":"ref","10571":"ref","10573":"ref","10574":"ref","10581":"tex","10583":"tex","10584":"rig","10591":"art","10593":"art","10594":"tex","10601":"art","10603":"art","10604":"art","10611":"art","10613":"rig","10614":"art","10621":"tex","10623":"rig","10631":"ref","10633":"ref","10641":"ref","10643":"ref","10644":"ref","10651":"tex","10653":"ref","10661":"ref","10663":"ref","10664":"ref","10671":"ref","10673":"ref","10674":"ref","10681":"ref","10683":"ref","10691":"ref","10693":"ref","10694":"ref","10699":"ref","10713":"ref","10723":"ref","10761":"ref","10763":"ref","10783":"ref","16163":"ref","20211":"art","20212":"art","69993":"rig","80023":"ref","90207":"art","90213":"ref"};
+const NAMES = {"10011":"Celestis","10012":"Stellarys","10021":"Helmut","10022":"Helmwhelp","10023":"Helgon","10024":"Jawling","10025":"Infergon","10026":"Pawney","10027":"Rookey","10031":"Wisptis","10032":"Ignitis","10033":"Fulmintis","10041":"Skippy","10042":"Pranky","10043":"Glacy","10045":"Leafy","10051":"Emberpup","10052":"Flameruff","10053":"Scorchhowl","10055":"Inferlupa","10122":"Besauce","10131":"Bonesky","10132":"Fenrier","10133":"Glynsera","10141":"Bulbly","10142":"Veilfloat","10143":"Luminelle","10161":"Budclaw","10162":"Shrubclaw","10163":"Geoclaw","10171":"Susuta","10172":"Popota","10173":"Piopiota","10174":"Panpanta","10181":"Chirpi","10184":"Tromber","10185":"Cornet","10187":"Tubster","10191":"Shelly","10192":"Sheldon","10194":"Sherro","10201":"Hummin","10203":"Hexxin","10207":"Tuckin","10211":"Iris","10212":"Irisal","10213":"Irisalis","10221":"Bolty","10222":"Blazen","10231":"Flutternym","10232":"Gracewing","10233":"Somniwing","10261":"Nimbi","10262":"Turbo","10263":"Dreaple","10281":"Pebbling","10282":"Lavazar","10283":"Magmarex","10284":"Geodeback","10285":"Minespine","10291":"Fentuft","10293":"Fenmane","10321":"Budsquire","10323":"Thornblade","10324":"Melloblum","10331":"Sparki","10333":"Flamerion","10351":"Dewy","10352":"Fragrancier","10361":"Helion","10363":"Soleon","10371":"Lunara","10373":"Fennelun","10381":"Reefish","10383":"Coraliz","10421":"Malangel","10423":"Malevsera","10431":"Cozite","10433":"Bailite","10443":"Eklue","10451":"Baleetle","10453":"Waleetle","10454":"Bouldus","10471":"Pomegg","10474":"Dazmand","10475":"Pomawk","10481":"Fahloo","10483":"Erlath","10501":"Cubbo","10503":"Grizbo","10511":"Squarrel","10512":"Squashel","10583":"Glameep"};
 const KNOWN = new Set(Object.keys(NAMES));
 
-/* ---- static artwork from ./art/ (GitHub Pages) ---- */
-async function bootArt(){
-  try{
-    const r = await fetch('art-manifest.json', {cache: 'no-cache'});
-    if(!r.ok) return false;
-    const man = await r.json();
-    /* accepts {key: "real file name.png"} or a plain list of keys */
-    let n = 0;
-    if(Array.isArray(man)){
-      for(const k of man){ urls[k] = 'art/' + encodeURIComponent(k) + '.webp'; n++; }
-    } else {
-      for(const k of Object.keys(man)){ urls[k] = 'art/' + encodeURIComponent(man[k]); n++; }
-    }
-    if(!n) return false;
-    loaded = n;
-    if(bar) bar.hidden = false;
-    if(cnt) cnt.textContent = loaded + ' images loaded';
-    if(drop) drop.hidden = true;
-    return true;
-  }catch(e){ return false; }
-}
-
 const treeEl = document.getElementById('tree');
-const bar  = document.getElementById('bar');
-const cnt  = document.getElementById('count');
-const q    = document.getElementById('q');
+const bar = document.getElementById('bar');
+const cnt = document.getElementById('count');
+const q   = document.getElementById('q');
 const drop = document.getElementById('drop');
 const urls = {};
 let loaded = 0;
 
 function label(v){
-  const bits = [];
-  if(v.v) bits.push('var ' + v.v);
-  if(v.t) bits.push(v.t);
-  return bits.join(' \u00b7 ') || 'base';
+  const b = [];
+  if(v.v) b.push('var ' + v.v);
+  if(v.t) b.push(v.t);
+  return b.join(' \u00b7 ') || 'base';
 }
 
 function build(){
@@ -871,48 +125,34 @@ function build(){
   let showing = 0;
 
   for(const fam of Object.keys(TREE).sort()){
-    const species = TREE[fam];
-    const ids = Object.keys(species).sort().filter(id =>
+    const sp = TREE[fam];
+    const ids = Object.keys(sp).sort().filter(id =>
       !term || id.includes(term)
       || (NAMES[id] || '').toLowerCase().includes(term)
-      || species[id].some(v => (v.t || '').toLowerCase().includes(term)));
+      || sp[id].some(v => (v.t || '').toLowerCase().includes(term)));
     if(!ids.length) continue;
 
     const box = document.createElement('div');
     box.className = 'fam';
-    const n = ids.reduce((a, id) => a + species[id].length, 0);
+    const n = ids.reduce((a, id) => a + sp[id].length, 0);
     showing += n;
-    box.innerHTML = '<div class="fam-h"><b>Line ' + fam + '</b><em>'
-      + ids.length + (ids.length > 1 ? ' species' : ' species')
-      + '</em><span class="pill">' + n + ' images</span></div>';
+    box.innerHTML = '<div class="fam-h"><b>Line ' + fam + '</b><em>' + ids.length
+      + ' species</em><span class="pill">' + n + ' images</span></div>';
 
     for(const id of ids){
-      const tier = (typeof CLS !== 'undefined' && CLS[id]) ? CLS[id] : 'ref';
-      const sp = document.createElement('div');
-      sp.className = 'sp';
-
+      const tier = CLS[id] || 'ref';
+      const row = document.createElement('div');
+      row.className = 'sp';
       const head = document.createElement('div');
       head.className = 'sp-head';
-      head.innerHTML = '<span class="dot-t" data-t="' + tier + '" title="' + tier + '"></span>'
-                     + '<span class="sp-id">' + id + '</span>';
-      if(KNOWN.has(id)){
-        const b = document.createElement('b');
-        b.className = 'sp-known';
-        b.textContent = NAMES[id];
-        b.title = 'Recovered from the design-data blob';
-        head.appendChild(b);
-      }
-      const inp = document.createElement('input');
-      inp.className = 'sp-name' + (KNOWN.has(id) ? ' sp-edit' : '');
-      inp.placeholder = KNOWN.has(id) ? 'override' : 'display name';
-      inp.value = KNOWN.has(id) ? '' : (NAMES[id] || '');
-      inp.oninput = () => { NAMES[id] = inp.value.trim() || (KNOWN.has(id) ? SOLVED.ids[id] : ''); };
-      head.appendChild(inp);
-      sp.appendChild(head);
+      head.innerHTML = '<span class="dot-t" data-t="' + tier + '"></span>'
+                     + '<span class="sp-id">' + id + '</span>'
+                     + (KNOWN.has(id) ? '<b class="sp-known">' + NAMES[id] + '</b>' : '');
+      row.appendChild(head);
 
-      const row = document.createElement('div');
-      row.className = 'sp-imgs';
-      for(const v of species[id]){
+      const imgs = document.createElement('div');
+      imgs.className = 'sp-imgs';
+      for(const v of sp[id]){
         const t = document.createElement('figure');
         t.className = 'tile ' + (urls[v.f] ? 'has' : 'miss');
         if(urls[v.f]){
@@ -920,79 +160,70 @@ function build(){
           im.src = urls[v.f]; im.alt = v.f; im.loading = 'lazy';
           t.appendChild(im);
           t.onclick = () => show(urls[v.f], (NAMES[id] ? NAMES[id] + ' \u00b7 ' : '') + id + ' \u00b7 ' + label(v));
-        } else {
-          const ph = document.createElement('div');
-          ph.className = 'ph'; ph.textContent = 'missing';
-          t.appendChild(ph);
         }
-        const cap = document.createElement('figcaption');
-        cap.textContent = label(v);
-        t.appendChild(cap);
-        row.appendChild(t);
+        const c = document.createElement('figcaption');
+        c.textContent = label(v);
+        t.appendChild(c);
+        imgs.appendChild(t);
       }
-      sp.appendChild(row);
-      box.appendChild(sp);
+      row.appendChild(imgs);
+      box.appendChild(row);
     }
     treeEl.appendChild(box);
   }
-
-  const total = Object.values(TREE).reduce((a, s) =>
-    a + Object.values(s).reduce((b, arr) => b + arr.length, 0), 0);
-  bar.style.display = 'flex';
-  cnt.textContent = loaded + ' of ' + total + ' images loaded'
-    + (term ? ' \u00b7 ' + showing + ' shown' : '');
+  if(cnt) cnt.textContent = loaded ? (loaded + ' loaded \u00b7 ' + showing + ' slots') : (showing + ' slots');
 }
 
-function show(src, caption){
-  let lb = document.querySelector('.lightbox');
-  if(!lb){
-    lb = document.createElement('div');
-    lb.className = 'lightbox';
-    lb.innerHTML = '<div><img alt=""><p></p></div>';
-    lb.onclick = () => lb.classList.remove('on');
-    document.body.appendChild(lb);
-    document.addEventListener('keydown', e => { if(e.key === 'Escape') lb.classList.remove('on'); });
-  }
-  lb.querySelector('img').src = src;
-  lb.querySelector('p').textContent = caption;
-  lb.classList.add('on');
+function show(src, cap){
+  document.getElementById('lbimg').src = src;
+  document.getElementById('lbcap').textContent = cap;
+  document.getElementById('lb').classList.add('on');
 }
-
-function add(files){
-  for(const f of files){
-    if(!f.type.startsWith('image/')) continue;
-    const stem = f.name.replace(/\.\w+$/, '').replace(/^.*ResearchBook_Enter_/i, '');
-    if(!urls[stem]) loaded++;
-    urls[stem] = URL.createObjectURL(f);
-  }
-  build();
-}
-
-document.getElementById('pick').onclick = () => document.getElementById('file').click();
-document.getElementById('file').onchange = e => add(e.target.files);
+document.getElementById('lb').onclick = e => e.currentTarget.classList.remove('on');
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.getElementById('lb').classList.remove('on'); });
 q.oninput = build;
 
-document.getElementById('clear').onclick = () => {
-  Object.values(urls).forEach(URL.revokeObjectURL);
-  for(const k in urls) delete urls[k];
-  loaded = 0; build();
+const KEY = /ResearchBook_Enter_(\d{5,7}(?:_[A-Za-z]+)?)/i;
+function addFiles(files){
+  for(const f of files){
+    const m = KEY.exec(f.name);
+    if(!m) continue;
+    if(!urls[m[1]]){ urls[m[1]] = URL.createObjectURL(f); loaded++; }
+  }
+  if(loaded){ bar.hidden = false; drop.hidden = true; }
+  build();
+}
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+drop.ondragleave = () => drop.classList.remove('over');
+drop.ondrop = async e => {
+  e.preventDefault(); drop.classList.remove('over');
+  const out = [];
+  for(const it of e.dataTransfer.items){
+    const h = it.webkitGetAsEntry && it.webkitGetAsEntry();
+    if(h) await walk(h, out); else { const f = it.getAsFile(); if(f) out.push(f); }
+  }
+  addFiles(out);
 };
+async function walk(entry, out){
+  if(entry.isFile) return new Promise(r => entry.file(f => { out.push(f); r(); }));
+  const rd = entry.createReader();
+  const items = await new Promise(r => rd.readEntries(r));
+  for(const e of items) await walk(e, out);
+}
 
-document.getElementById('export').onclick = () => {
-  const clean = {};
-  Object.keys(NAMES).sort().forEach(k => { if(NAMES[k]) clean[k] = NAMES[k]; });
-  const blob = new Blob(['const NAMES = ' + JSON.stringify(clean, null, 2) + ';'], {type:'text/plain'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'aniimo-names.js';
-  a.click();
-};
-
-['dragenter','dragover'].forEach(ev =>
-  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
-['dragleave','drop'].forEach(ev =>
-  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
-drop.addEventListener('drop', e => add(e.dataTransfer.files));
+async function bootArt(){
+  try{
+    const r = await fetch('art-manifest.json', {cache:'no-cache'});
+    if(!r.ok) return false;
+    const man = await r.json();
+    let n = 0;
+    if(Array.isArray(man)){ for(const k of man){ urls[k] = 'art/' + encodeURIComponent(k) + '.webp'; n++; } }
+    else { for(const k of Object.keys(man)){ urls[k] = 'art/' + encodeURIComponent(man[k]); n++; } }
+    if(!n) return false;
+    loaded = n; bar.hidden = false; drop.hidden = true;
+    return true;
+  }catch(e){ return false; }
+}
 
 build();
 bootArt().then(ok => { if(ok) build(); });
